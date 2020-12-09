@@ -1,6 +1,8 @@
 import { nanoid } from 'nanoid';
 import * as actions from './constants';
-import { addTask as addTaskToList } from './list.creator';
+import {
+  addTask as addTaskToList,
+  removeTask as removeTaskFromList } from './list.creator';
 
 export function addTask(content, listId) {
   return (dispatch, getStore) => {
@@ -14,14 +16,13 @@ export function addTask(content, listId) {
   };
 }
 
-export function deleteTask(content, listId) {
+export function removeTask(listId, taskId) {
   return (dispatch, getStore) => {
-    const taskId = nanoid();
     dispatch({
-      type: actions.ADD_TASK,
-      task: { id: taskId, content, authorId: getStore().authors.currentAuthorId }
+      type: actions.REMOVE_TASK,
+      taskId
     });
-    dispatch(addTaskToList(listId, taskId));
+    dispatch(removeTaskFromList(listId, taskId));
     dispatch(saveTasks());
   };
 }

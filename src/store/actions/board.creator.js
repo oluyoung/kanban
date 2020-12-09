@@ -16,6 +16,12 @@ export function updateBoardListOrder(source, destination, draggableId) {
   }
 }
 
+export function setupBoard() {
+  return (dispatch, getStore) => {
+
+  };
+}
+
 export function saveBoard() {
   return (_, getStore) => {
     localStorage.setItem('board', JSON.stringify(getStore().boards.boards));
@@ -23,15 +29,8 @@ export function saveBoard() {
 }
 
 export function getBoard() {
-  return (dispatch, store) => {
-    const board = localStorage.getItem('board');
-    if (board) {
-      dispatch({
-        type: actions.GET_BOARD,
-        board: JSON.parse(board)
-      });
-      dispatch(getLists());
-      dispatch(getTasks());
-    }
+  return (dispatch) => {
+    dispatch(getLists());
+    dispatch(getTasks());
   }
 }

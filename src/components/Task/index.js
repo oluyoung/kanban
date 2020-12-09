@@ -31,7 +31,7 @@ export default class Task extends PureComponent {
             isDragging={snapshot.isDragging}
           >
             {this.props.task.content}
-            <DeleteBtn onClick={() => this.props.removeTask(this.props.task.id)}>Del</DeleteBtn>
+            <DeleteBtn onClick={() => this.props.removeTask(this.props.listId, this.props.task.id)}>Del</DeleteBtn>
           </Container>
         )}
       </Draggable>

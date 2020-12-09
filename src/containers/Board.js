@@ -4,11 +4,10 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import List from '../components/List';
-// import List from '../components/List';
 import { getBoardLists } from '../store/selectors';
-import { updateBoardListOrder } from '../store/actions/board.creator';
+import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
 import { updateSingleList, updateLists, openTaskInput } from '../store/actions/list.creator';
-import { addTask } from '../store/actions/task.creator';
+import { addTask, removeTask } from '../store/actions/task.creator';
 
 const Container = styled.div`
   display: flex;
@@ -43,6 +42,10 @@ class InnerList extends React.PureComponent {
 }
 
 class Board extends Component {
+  componentDidMount() {
+    this.props.getBoard();
+  }
+
   onDragEnd = result => {
     const { destination, source, draggableId, type } = result;
     if (!destination) {
@@ -123,7 +126,8 @@ const mapDispatchToProps = dispatch => ({
   updateLists: (source, destination, draggableId) => dispatch(updateLists(source, destination, draggableId)),
   openTaskInput: (listId) => dispatch(openTaskInput(listId)),
   addTask: (content, listId) => dispatch(addTask(content, listId)),
-  removeTask: (content, listId) => dispatch(addTask(content, listId))
+  removeTask: (content, listId) => dispatch(removeTask(content, listId)),
+  getBoard: () => dispatch(getBoard())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);
