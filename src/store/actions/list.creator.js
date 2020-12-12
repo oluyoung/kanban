@@ -1,6 +1,6 @@
 import * as actions from './constants';
 
-export function updateSingleList(source, destination, draggableId) {
+export function updateSingleListOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
     const list = getStore().lists.lists[source.droppableId];
 
@@ -8,14 +8,12 @@ export function updateSingleList(source, destination, draggableId) {
     taskIds.splice(source.index, 1);
     taskIds.splice(destination.index, 0, draggableId);
 
-    const updatedColumn = {
-      ...list,
-      taskIds
-    };
-
     const updatedLists = {
       ...getStore().lists.lists,
-      [updatedColumn.id]: updatedColumn
+      [list.id]: {
+        ...list,
+        taskIds: [...taskIds]
+      }
     };
 
     dispatch({
@@ -26,29 +24,27 @@ export function updateSingleList(source, destination, draggableId) {
   };
 }
 
-export function updateLists(source, destination, draggableId) {
+export function updateListsOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
     const startList = getStore().lists.lists[source.droppableId];
     const endList = getStore().lists.lists[destination.droppableId];
 
     const startListTaskIds = Array.from(startList.taskIds);
     startListTaskIds.splice(source.index, 1);
-    const updatedStartList = {
-      ...startList,
-      taskIds: startListTaskIds
-    };
 
     const endListTaskIds = Array.from(endList.taskIds);
     endListTaskIds.splice(destination.index, 0, draggableId);
-    const updatedEndList = {
-      ...endList,
-      taskIds: endListTaskIds
-    };
 
     const updatedLists = {
       ...getStore().lists.lists,
-      [updatedStartList.id]: updatedStartList,
-      [updatedEndList.id]: updatedEndList
+      [startList.id]: {
+        ...startList,
+        taskIds: [...startListTaskIds]
+      },
+      [endList.id]: {
+        ...endList,
+        taskIds: [...endListTaskIds]
+      }
     };
 
     dispatch({
@@ -86,12 +82,9 @@ export function addTask(listId, taskId) {
 export function removeTask(listId, taskId) {
   return (dispatch, getStore) => {
     const list = {...getStore().lists.lists[listId]};
-    const taskIds = Array.from(list.taskIds);
-    const taskIdIndex = taskIds.findIndex(taskId);
-    taskIds.splice(taskIdIndex, 1);
     const updatedList = {
       ...list,
-      taskIds
+      taskIds: list.taskIds.filter(id => (taskId !== id))
     };
 
     dispatch({

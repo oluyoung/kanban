@@ -36,7 +36,8 @@ interface Board {
   id: string;
   title: string;
   listIds: string[];
-  listOrder: string[]
+  listOrder: string[];
+  authorId: string;
 }
 ```
 
@@ -47,5 +48,6 @@ interface List {
   id: string;
   title: string;
   taskIds: string;
+  authorId: string;
 }
 ```

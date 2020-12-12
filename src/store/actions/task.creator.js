@@ -18,9 +18,12 @@ export function addTask(content, listId) {
 
 export function removeTask(listId, taskId) {
   return (dispatch, getStore) => {
+    const tasks = {...getStore().tasks.tasks};
+    delete tasks[taskId];
+
     dispatch({
       type: actions.REMOVE_TASK,
-      taskId
+      tasks: {...tasks}
     });
     dispatch(removeTaskFromList(listId, taskId));
     dispatch(saveTasks());

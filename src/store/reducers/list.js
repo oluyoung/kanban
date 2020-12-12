@@ -18,9 +18,7 @@ const initialState = {
       taskIds: []
     }
   },
-  listIdWithOpenTaskInput: {
-    listId: ''
-  }
+  listIdWithOpenTaskInput: ''
 };
 
 export default function listReducer(state = initialState, action) {

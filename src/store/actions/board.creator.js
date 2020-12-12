@@ -18,7 +18,7 @@ export function updateBoardListOrder(source, destination, draggableId) {
 
 export function setupBoard() {
   return (dispatch, getStore) => {
-
+    
   };
 }
 

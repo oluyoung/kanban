@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import List from '../components/List';
 import { getBoardLists } from '../store/selectors';
 import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
-import { updateSingleList, updateLists, openTaskInput } from '../store/actions/list.creator';
+import { updateSingleListOrder, updateListsOrder, openTaskInput } from '../store/actions/list.creator';
 import { addTask, removeTask } from '../store/actions/task.creator';
 
 const Container = styled.div`
@@ -16,7 +16,6 @@ const Container = styled.div`
   align-items: flex-start;
   overflow-x: scroll;
 `;
-
 const AddListBtn = styled.button`
    border: 0;
    outline: 0;
@@ -32,7 +31,7 @@ class InnerList extends React.PureComponent {
     const { list, taskMap, index } = this.props;
     const tasks = list.taskIds.map(taskId => taskMap[taskId]);
     return <List
-      key={list.id} column={list} tasks={tasks} index={index}
+      column={list} tasks={tasks} index={index}
       openTaskInput={this.props.openTaskInput}
       listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
       addTask={this.props.addTask}
@@ -43,7 +42,7 @@ class InnerList extends React.PureComponent {
 
 class Board extends Component {
   componentDidMount() {
-    this.props.getBoard();
+    // this.props.getBoard();
   }
 
   onDragEnd = result => {
@@ -63,9 +62,9 @@ class Board extends Component {
     }
 
     if (source.droppableId === destination.droppableId) {
-      this.props.updateSingleList(source, destination, draggableId);
+      this.props.updateSingleListOrder(source, destination, draggableId);
     } else {
-      this.props.updateLists(source, destination, draggableId);
+      this.props.updateListsOrder(source, destination, draggableId);
     }
   }
 
@@ -89,6 +88,7 @@ class Board extends Component {
               onKeyDown={this.add}
               {...provided.droppableProps}
               ref={provided.innerRef}>
+
               {this.props.currentBoard.listOrder.map((listId, index) => {
                 const list = this.props.lists.find(list => (listId === list.id));
                 return <InnerList
@@ -101,6 +101,7 @@ class Board extends Component {
                   addTask={this.props.addTask}
                   removeTask={this.props.removeTask} />
               })}
+
               {provided.placeholder}
               <AddListBtn>Add a new list</AddListBtn>
             </Container>
@@ -122,8 +123,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateBoardListOrder: (source, destination, draggableId) => dispatch(updateBoardListOrder(source, destination, draggableId)),
-  updateSingleList: (source, destination, draggableId) => dispatch(updateSingleList(source, destination, draggableId)),
-  updateLists: (source, destination, draggableId) => dispatch(updateLists(source, destination, draggableId)),
+  updateSingleListOrder: (source, destination, draggableId) => dispatch(updateSingleListOrder(source, destination, draggableId)),
+  updateListsOrder: (source, destination, draggableId) => dispatch(updateListsOrder(source, destination, draggableId)),
   openTaskInput: (listId) => dispatch(openTaskInput(listId)),
   addTask: (content, listId) => dispatch(addTask(content, listId)),
   removeTask: (content, listId) => dispatch(removeTask(content, listId)),

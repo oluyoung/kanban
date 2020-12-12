@@ -31,7 +31,6 @@ const TaskList = styled.div`
   background-color: white;
   flex-grow: 1;
   min-height: 100px;
-  background-color: #e7e9ed;
 `;
 
 

@@ -12,10 +12,6 @@ const initialState = {
 export default function taskReducer(state = initialState, action) {
   switch (action.type) {
     case actions.REMOVE_TASK:
-      return {
-        ...state,
-        tasks: {...action.tasks}
-      }
     case actions.GET_TASKS:
       return {
         ...state,
