@@ -54,13 +54,20 @@ class InnerList extends React.Component {
 }
 
 export default class List extends React.Component {
+  onKeyDownHandle = (event) => {
+    if(event.key === 'Escape'){
+      this.props.closeTaskInput();
+    }
+  }
+
   render() {
     return (
       <Draggable draggableId={this.props.column.id} index={this.props.index}>
         {(provided) => (
           <Container
             ref={provided.innerRef}
-            {...provided.draggableProps}>
+            {...provided.draggableProps}
+            onKeyDown={this.onKeyDownHandle}>
             <Title {...provided.dragHandleProps}>
               {this.props.column.title}
               <AddTaskBtn onClick={() => this.props.openTaskInput(this.props.column.id)}>Add</AddTaskBtn>
@@ -77,7 +84,10 @@ export default class List extends React.Component {
                     listId={this.props.column.id}
                     removeTask={this.props.removeTask} />
                   {(this.props.listIdWithOpenTaskInput === this.props.column.id) &&
-                    <AddTaskInput addTask={this.props.addTask} listId={this.props.column.id} /> }
+                    <AddTaskInput
+                      addTask={this.props.addTask}
+                      listId={this.props.column.id}
+                      closeTaskInput={this.props.closeTaskInput} />}
                   {provided.placeholder}
                 </TaskList>
               )}

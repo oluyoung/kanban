@@ -43,6 +43,11 @@ export default function listReducer(state = initialState, action) {
         ...state,
         listIdWithOpenTaskInput: action.listId
       };
+    case actions.CLOSE_TASK_INPUT:
+      return {
+        ...state,
+        listIdWithOpenTaskInput: ''
+      };
     case actions.UPDATE_LISTS:
       return {
         ...state,

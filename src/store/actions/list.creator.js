@@ -29,8 +29,7 @@ export function updateListsOrder(source, destination, draggableId) {
     const startList = getStore().lists.lists[source.droppableId];
     const endList = getStore().lists.lists[destination.droppableId];
 
-    const startListTaskIds = Array.from(startList.taskIds);
-    startListTaskIds.splice(source.index, 1);
+    const startListTaskIds = startList.taskIds.filter((id, index) => (index === source.index));
 
     const endListTaskIds = Array.from(endList.taskIds);
     endListTaskIds.splice(destination.index, 0, draggableId);
@@ -59,6 +58,12 @@ export function openTaskInput(listId) {
   return {
     type: actions.OPEN_TASK_INPUT,
     listId
+  };
+}
+
+export function closeTaskInput(listId) {
+  return {
+    type: actions.CLOSE_TASK_INPUT,
   };
 }
 

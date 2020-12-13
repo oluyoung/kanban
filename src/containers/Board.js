@@ -6,7 +6,11 @@ import Header from '../components/Header';
 import List from '../components/List';
 import { getBoardLists } from '../store/selectors';
 import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
-import { updateSingleListOrder, updateListsOrder, openTaskInput } from '../store/actions/list.creator';
+import {
+  updateSingleListOrder,
+  updateListsOrder,
+  openTaskInput,
+  closeTaskInput } from '../store/actions/list.creator';
 import { addTask, removeTask } from '../store/actions/task.creator';
 
 const Container = styled.div`
@@ -33,6 +37,7 @@ class InnerList extends React.PureComponent {
     return <List
       column={list} tasks={tasks} index={index}
       openTaskInput={this.props.openTaskInput}
+      closeTaskInput={this.props.closeTaskInput}
       listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
       addTask={this.props.addTask}
       removeTask={this.props.removeTask}
@@ -68,12 +73,6 @@ class Board extends Component {
     }
   }
 
-  add = (event) => {
-    if(event.key === 'Enter'){
-       alert('Adding....');
-    }
-  }
-
   render() {
     return (
       <>
@@ -85,7 +84,6 @@ class Board extends Component {
           type='list'>
           {provided => (
             <Container
-              onKeyDown={this.add}
               {...provided.droppableProps}
               ref={provided.innerRef}>
 
@@ -97,6 +95,7 @@ class Board extends Component {
                   taskMap={this.props.tasks}
                   index={index}
                   openTaskInput={this.props.openTaskInput}
+                  closeTaskInput={this.props.closeTaskInput}
                   listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
                   addTask={this.props.addTask}
                   removeTask={this.props.removeTask} />
@@ -126,6 +125,7 @@ const mapDispatchToProps = dispatch => ({
   updateSingleListOrder: (source, destination, draggableId) => dispatch(updateSingleListOrder(source, destination, draggableId)),
   updateListsOrder: (source, destination, draggableId) => dispatch(updateListsOrder(source, destination, draggableId)),
   openTaskInput: (listId) => dispatch(openTaskInput(listId)),
+  closeTaskInput: () => dispatch(closeTaskInput()),
   addTask: (content, listId) => dispatch(addTask(content, listId)),
   removeTask: (content, listId) => dispatch(removeTask(content, listId)),
   getBoard: () => dispatch(getBoard())
