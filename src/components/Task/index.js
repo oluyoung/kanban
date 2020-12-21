@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.p`
   margin: 0;
@@ -31,7 +33,9 @@ export default class Task extends PureComponent {
             isDragging={snapshot.isDragging}
           >
             {this.props.task.content}
-            <DeleteBtn onClick={() => this.props.removeTask(this.props.listId, this.props.task.id)}>Del</DeleteBtn>
+            <DeleteBtn onClick={() => this.props.removeTask(this.props.listId, this.props.task.id)}>
+              <FontAwesomeIcon icon={faTrashAlt} size="lg" />
+            </DeleteBtn>
           </Container>
         )}
       </Draggable>

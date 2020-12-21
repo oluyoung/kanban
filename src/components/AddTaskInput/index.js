@@ -32,6 +32,10 @@ function AddTaskInput(props) {
   const inputRef = React.useRef(null);
   const [value, setValue] = React.useState(undefined);
 
+  React.useEffect(() => {
+    inputRef.current.focus();
+  });
+
   const keyDownHandle = (event) => {
     if(event.key === 'Enter') {
       props.addTask(inputRef.current.value, props.listId);

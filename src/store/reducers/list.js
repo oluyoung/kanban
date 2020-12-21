@@ -23,6 +23,14 @@ const initialState = {
 
 export default function listReducer(state = initialState, action) {
   switch (action.type) {
+    case actions.ADD_LIST:
+      return {
+        ...state,
+        lists: {
+          ...state.lists,
+          [action.listId]: action.list
+        }
+      };
     case actions.GET_LISTS:
       return {
         ...state,

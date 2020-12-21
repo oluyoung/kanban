@@ -4,11 +4,13 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import List from '../components/List';
+import AddList from '../components/AddList';
 import { getBoardLists } from '../store/selectors';
 import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
 import {
-  updateSingleListOrder,
-  updateListsOrder,
+  updateListTasksOrder,
+  updateListsTasksOrder,
+  addList,
   openTaskInput,
   closeTaskInput } from '../store/actions/list.creator';
 import { addTask, removeTask } from '../store/actions/task.creator';
@@ -18,16 +20,6 @@ const Container = styled.div`
   flex-flow: row nowrap;
   jusify-content: flex-start;
   align-items: flex-start;
-  overflow-x: scroll;
-`;
-const AddListBtn = styled.button`
-   border: 0;
-   outline: 0;
-   background-color: #e7e9ed;
-   font-weight: bold;
-   padding: 8px;
-   border-radius: 5px;
-   width: 20vw
 `;
 
 class InnerList extends React.PureComponent {
@@ -67,9 +59,9 @@ class Board extends Component {
     }
 
     if (source.droppableId === destination.droppableId) {
-      this.props.updateSingleListOrder(source, destination, draggableId);
+      this.props.updateListTasksOrder(source, destination, draggableId);
     } else {
-      this.props.updateListsOrder(source, destination, draggableId);
+      this.props.updateListsTasksOrder(source, destination, draggableId);
     }
   }
 
@@ -102,7 +94,7 @@ class Board extends Component {
               })}
 
               {provided.placeholder}
-              <AddListBtn>Add a new list</AddListBtn>
+              <AddList boardId={this.props.currentBoard.id} addNewList={this.props.addNewList} />
             </Container>
           )}
         </Droppable>
@@ -122,11 +114,12 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateBoardListOrder: (source, destination, draggableId) => dispatch(updateBoardListOrder(source, destination, draggableId)),
-  updateSingleListOrder: (source, destination, draggableId) => dispatch(updateSingleListOrder(source, destination, draggableId)),
-  updateListsOrder: (source, destination, draggableId) => dispatch(updateListsOrder(source, destination, draggableId)),
+  updateListTasksOrder: (source, destination, draggableId) => dispatch(updateListTasksOrder(source, destination, draggableId)),
+  updateListsTasksOrder: (source, destination, draggableId) => dispatch(updateListsTasksOrder(source, destination, draggableId)),
   openTaskInput: (listId) => dispatch(openTaskInput(listId)),
   closeTaskInput: () => dispatch(closeTaskInput()),
   addTask: (content, listId) => dispatch(addTask(content, listId)),
+  addNewList: (boardId, title) => dispatch(addList(boardId, title)),
   removeTask: (content, listId) => dispatch(removeTask(content, listId)),
   getBoard: () => dispatch(getBoard())
 });

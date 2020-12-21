@@ -18,7 +18,24 @@ export function updateBoardListOrder(source, destination, draggableId) {
 
 export function setupBoard() {
   return (dispatch, getStore) => {
-    
+
+  };
+}
+
+export function addList(boardId, listId) {
+  return (dispatch, getStore) => {
+    const board = {...getStore().boards.boards[boardId]};
+    const listIds = Array.from(board.listIds);
+
+    dispatch({
+      type: actions.ADD_LIST_TO_BOARD,
+      updatedBoard: {
+        ...board,
+        listIds: listIds.concat(listId),
+        listOrder: listIds.concat(listId),
+      }
+    });
+    dispatch(saveBoard());
   };
 }
 

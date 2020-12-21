@@ -6,6 +6,7 @@ import AddTaskInput from '../AddTaskInput';
 
 const Container = styled.div`
   margin: 8px;
+  margin-top: 0;
   border: 1px solid lightgrey;
   border-radius: 5px;
   width: calc(20vw - 8px);
@@ -32,7 +33,6 @@ const TaskList = styled.div`
   flex-grow: 1;
   min-height: 100px;
 `;
-
 
 // optimize task list to not re-render on every update but only if there is a difference in tasks list handling
 // can probably use PureComponent, and should extract into different components

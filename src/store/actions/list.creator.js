@@ -1,11 +1,12 @@
+import { nanoid } from 'nanoid';
 import * as actions from './constants';
+import { addList as addListToBoard } from './board.creator';
 
-export function updateSingleListOrder(source, destination, draggableId) {
+export function updateListTasksOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
     const list = getStore().lists.lists[source.droppableId];
 
-    const taskIds = Array.from(list.taskIds);
-    taskIds.splice(source.index, 1);
+    const taskIds = list.taskIds.filter((_, index) => (index === source.index));
     taskIds.splice(destination.index, 0, draggableId);
 
     const updatedLists = {
@@ -24,12 +25,12 @@ export function updateSingleListOrder(source, destination, draggableId) {
   };
 }
 
-export function updateListsOrder(source, destination, draggableId) {
+export function updateListsTasksOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
     const startList = getStore().lists.lists[source.droppableId];
     const endList = getStore().lists.lists[destination.droppableId];
 
-    const startListTaskIds = startList.taskIds.filter((id, index) => (index === source.index));
+    const startListTaskIds = startList.taskIds.filter((_, index) => (index === source.index));
 
     const endListTaskIds = Array.from(endList.taskIds);
     endListTaskIds.splice(destination.index, 0, draggableId);
@@ -61,7 +62,7 @@ export function openTaskInput(listId) {
   };
 }
 
-export function closeTaskInput(listId) {
+export function closeTaskInput() {
   return {
     type: actions.CLOSE_TASK_INPUT,
   };
@@ -70,10 +71,9 @@ export function closeTaskInput(listId) {
 export function addTask(listId, taskId) {
   return (dispatch, getStore) => {
     const list = {...getStore().lists.lists[listId]};
-    const taskIds = Array.from(list.taskIds);
     const updatedList = {
       ...list,
-      taskIds: taskIds.concat(taskId)
+      taskIds: list.taskIds.concat(taskId)
     };
 
     dispatch({
@@ -81,7 +81,7 @@ export function addTask(listId, taskId) {
       updatedList
     });
     dispatch(saveLists());
-  }
+  };
 }
 
 export function removeTask(listId, taskId) {
@@ -98,6 +98,18 @@ export function removeTask(listId, taskId) {
     });
     dispatch(saveLists());
   }
+}
+
+export function addList(boardId, title) {
+  return (dispatch) => {
+    const listId = nanoid();
+    dispatch({
+      type: actions.ADD_LIST,
+      listId,
+      list: {id: listId, title, taskIds: []}
+    });
+    dispatch(addListToBoard(boardId, listId));
+  };
 }
 
 export function saveLists() {
