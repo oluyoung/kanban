@@ -6,7 +6,7 @@ export function updateListTasksOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
     const list = getStore().lists.lists[source.droppableId];
 
-    const taskIds = list.taskIds.filter((_, index) => (index === source.index));
+    const taskIds = list.taskIds.filter((_, index) => (index !== source.index));
     taskIds.splice(destination.index, 0, draggableId);
 
     const updatedLists = {
@@ -30,7 +30,7 @@ export function updateListsTasksOrder(source, destination, draggableId) {
     const startList = getStore().lists.lists[source.droppableId];
     const endList = getStore().lists.lists[destination.droppableId];
 
-    const startListTaskIds = startList.taskIds.filter((_, index) => (index === source.index));
+    const startListTaskIds = startList.taskIds.filter((_, index) => (index !== source.index));
 
     const endListTaskIds = Array.from(endList.taskIds);
     endListTaskIds.splice(destination.index, 0, draggableId);
