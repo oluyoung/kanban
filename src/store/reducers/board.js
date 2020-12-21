@@ -8,22 +8,29 @@ const initalData = {
       listIds: ['col1', 'col2', 'col3'],
       listOrder: ['col1', 'col2', 'col3'],
       authorId: 'author1'
+    },
+    board2: {
+      id: 'board2',
+      title: 'Project Management',
+      listIds: [],
+      listOrder: [],
+      authorId: 'author2'
     }
   },
-  currentBoardId: 'board1',
-  currentBoard: {
-    id: 'board1',
-    title: 'Awesome Project Management',
-    listIds: ['col1', 'col2', 'col3'],
-    listOrder: ['col1', 'col2', 'col3'],
-    authorId: 'author1'
-  }
+  currentBoardId: undefined,
+  currentBoard: undefined
 };
 
 const initialState = initalData
 
 export default function boardReducer(state = initialState, action) {
   switch(action.type) {
+    case actions.GET_CURRENT_BOARD:
+      return {
+        ...state,
+        currentBoardId: action.id,
+        currentBoard: { ...state.boards[action.id] }
+      };
     case actions.ADD_LIST_TO_BOARD:
       return {
         ...state,

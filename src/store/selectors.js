@@ -1,4 +1,7 @@
 export function getBoardLists(state) {
+  if (!state.boards.currentBoard) {
+    return [];
+  }
   return state.boards.currentBoard.listIds.map(listId => {
     return state.lists.lists[listId];
   });

@@ -9,7 +9,7 @@ const Container = styled.div`
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  padding: 5px 0;
+  padding: 10px 0;
 `;
 const Inner = styled.div`
   max-width: 99%;
@@ -19,19 +19,19 @@ const Inner = styled.div`
   align-items: center;
   width: 99%;
 `;
-// const Boards = styled.a`
-//   padding: 2px 10px;
-//   background-color: #89a0a9;
-//   border-radius: 5px;
-//   color: white;
-//   display: block;
-// `;
+const Boards = styled.a`
+  padding: 2px 10px;
+  background-color: #89a0a9;
+  border-radius: 5px;
+  color: white;
+  display: block;
+`;
 
 function Nav() {
   return (
     <Container>
       <Inner>
-        <Link to="/boards" />
+        <Link to="/" component={(props) => <Boards {...props}>Boards</Boards> } />
       </Inner>
     </Container>
   );

@@ -1,6 +1,4 @@
 import * as actions from './constants';
-import { getLists } from './list.creator';
-import { getTasks } from './task.creator';
 
 export function updateBoardListOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
@@ -13,12 +11,6 @@ export function updateBoardListOrder(source, destination, draggableId) {
     });
     dispatch(saveBoard());
   }
-}
-
-export function setupBoard() {
-  return (dispatch, getStore) => {
-
-  };
 }
 
 export function addList(boardId, listId) {
@@ -43,9 +35,23 @@ export function saveBoard() {
   };
 }
 
-export function getBoard(id) {
-  return (dispatch) => {
-    dispatch(getLists());
-    dispatch(getTasks());
+export function getBoard(boardId, authorId) {
+  return (dispatch, getStore) => {
+    const boards = getStore().boards.boards;
+    if (!Object.keys(boards).includes(boardId)) {
+      return;
+    }
+    console.log(authorId)
+    if (boards[boardId].authorId !== authorId) {
+      return;
+    }
+    dispatch(addCurrentBoard(boardId));
   }
+}
+
+export function addCurrentBoard(id) {
+  return {
+    type: actions.GET_CURRENT_BOARD,
+    id
+  };
 }
