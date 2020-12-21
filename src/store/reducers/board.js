@@ -6,7 +6,8 @@ const initalData = {
       id: 'board1',
       title: 'Awesome Project Management',
       listIds: ['col1', 'col2', 'col3'],
-      listOrder: ['col1', 'col2', 'col3']
+      listOrder: ['col1', 'col2', 'col3'],
+      authorId: 'author1'
     }
   },
   currentBoardId: 'board1',
@@ -14,7 +15,8 @@ const initalData = {
     id: 'board1',
     title: 'Awesome Project Management',
     listIds: ['col1', 'col2', 'col3'],
-    listOrder: ['col1', 'col2', 'col3']
+    listOrder: ['col1', 'col2', 'col3'],
+    authorId: 'author1'
   }
 };
 

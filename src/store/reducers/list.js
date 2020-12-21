@@ -5,17 +5,20 @@ const initialState = {
     col1: {
       id: 'col1',
       title: 'To do',
-      taskIds: ['task1', 'task3', 'task4']
+      taskIds: ['task1', 'task3', 'task4'],
+      authorId: 'author1'
     },
     col2: {
       id: 'col2',
       title: 'Doing',
-      taskIds: ['task2']
+      taskIds: ['task2'],
+      authorId: 'author1'
     },
     col3: {
       id: 'col3',
       title: 'Done',
-      taskIds: []
+      taskIds: [],
+      authorId: 'author1'
     }
   },
   listIdWithOpenTaskInput: ''

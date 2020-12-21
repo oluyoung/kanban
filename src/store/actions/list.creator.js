@@ -101,12 +101,12 @@ export function removeTask(listId, taskId) {
 }
 
 export function addList(boardId, title) {
-  return (dispatch) => {
+  return (dispatch, getStore) => {
     const listId = nanoid();
     dispatch({
       type: actions.ADD_LIST,
       listId,
-      list: {id: listId, title, taskIds: []}
+      list: {id: listId, title, taskIds: [], authorId: getStore().authors.currentAuthorId}
     });
     dispatch(addListToBoard(boardId, listId));
   };
