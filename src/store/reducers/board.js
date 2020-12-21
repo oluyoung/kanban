@@ -25,7 +25,6 @@ const initialState = initalData
 export default function boardReducer(state = initialState, action) {
   switch(action.type) {
     case actions.ADD_LIST_TO_BOARD:
-      console.log(action)
       return {
         ...state,
         currentBoard: {...action.updatedBoard},
@@ -33,11 +32,6 @@ export default function boardReducer(state = initialState, action) {
           ...state.boards,
           [action.updatedBoard.id]: {...action.updatedBoard}
         }
-      };
-    case actions.GET_BOARD:
-      return {
-        ...state,
-        boards: {...action.boards}
       };
     case actions.UPDATE_BOARD_LIST_ORDER:
       const updatedBoards = {

@@ -1,12 +1,15 @@
 import './index.css';
+import { BrowserRouter, Route } from 'react-router-dom';
+import Boards from './containers/Boards';
 import Board from './containers/Board';
-import Nav from './components/Nav';
 
 function App() {
   return (
     <>
-      <Nav />
-      <Board />
+      <BrowserRouter>
+        <Route exact path="/" component={Boards} />
+        <Route exact path="/:id" component={Board} />
+      </BrowserRouter>
     </>
   );
 }

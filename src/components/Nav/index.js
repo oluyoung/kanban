@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   background-color: #657d8a;
@@ -18,22 +19,22 @@ const Inner = styled.div`
   align-items: center;
   width: 99%;
 `;
-const Boards = styled.a`
-  padding: 2px 10px;
-  background-color: #89a0a9;
-  border-radius: 5px;
-  color: white;
-  display: block;
-`;
+// const Boards = styled.a`
+//   padding: 2px 10px;
+//   background-color: #89a0a9;
+//   border-radius: 5px;
+//   color: white;
+//   display: block;
+// `;
 
 function Nav() {
   return (
     <Container>
       <Inner>
-        <Boards>Boards</Boards>
+        <Link to="/boards" />
       </Inner>
     </Container>
-  )
+  );
 }
 
 export default Nav;

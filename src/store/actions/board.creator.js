@@ -4,8 +4,7 @@ import { getTasks } from './task.creator';
 
 export function updateBoardListOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
-    const updatedListOrder = Array.from(getStore().boards.currentBoard.listOrder);
-    updatedListOrder.splice(source.index, 1);
+    const updatedListOrder = getStore().boards.currentBoard.listOrder.filter((_, index) => (index !== source.index));
     updatedListOrder.splice(destination.index, 0, draggableId);
 
     dispatch({
@@ -25,14 +24,13 @@ export function setupBoard() {
 export function addList(boardId, listId) {
   return (dispatch, getStore) => {
     const board = {...getStore().boards.boards[boardId]};
-    const listIds = Array.from(board.listIds);
 
     dispatch({
       type: actions.ADD_LIST_TO_BOARD,
       updatedBoard: {
         ...board,
-        listIds: listIds.concat(listId),
-        listOrder: listIds.concat(listId),
+        listIds: board.listIds.concat(listId),
+        listOrder: board.listIds.concat(listId),
       }
     });
     dispatch(saveBoard());
@@ -45,7 +43,7 @@ export function saveBoard() {
   };
 }
 
-export function getBoard() {
+export function getBoard(id) {
   return (dispatch) => {
     dispatch(getLists());
     dispatch(getTasks());

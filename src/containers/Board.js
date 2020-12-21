@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import Nav from '../components/Nav';
 import Header from '../components/Header';
 import List from '../components/List';
 import AddList from '../components/AddList';
@@ -40,6 +41,7 @@ class InnerList extends React.PureComponent {
 class Board extends Component {
   componentDidMount() {
     // this.props.getBoard();
+    console.log(this.props.match.params.id);
   }
 
   onDragEnd = result => {
@@ -68,6 +70,7 @@ class Board extends Component {
   render() {
     return (
       <>
+      <Nav />
       <Header title={this.props.currentBoard.title} />
       <DragDropContext onDragEnd={this.onDragEnd}>
         <Droppable
