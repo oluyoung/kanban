@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
 width: 100vw;
-padding: 8px;
+padding: 16px 8px;
 `;
 const Title = styled.h3`
 `;

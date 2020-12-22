@@ -120,11 +120,13 @@ export function saveLists() {
 }
 
 export function getLists() {
-  const lists = localStorage.getItem('lists');
-  if (lists) {
-    return {
-      type: actions.GET_LISTS,
-      lists: JSON.parse(lists)
-    };
-  }
+  return (dispatch) => {
+    const lists = localStorage.getItem('lists');
+    if (lists) {
+      dispatch({
+        type: actions.GET_LISTS,
+        lists: JSON.parse(lists)
+      });
+    }
+  };
 }

@@ -25,6 +25,25 @@ const initialState = initalData
 
 export default function boardReducer(state = initialState, action) {
   switch(action.type) {
+    case actions.GET_BOARDS:
+      return {
+        ...state,
+        boards: action.boards
+      };
+    case actions.ADD_BOARD:
+      return {
+        ...state,
+        boards: {
+          ...state.boards,
+          [action.board.id]: {
+            id: action.board.id,
+            title: action.board.title,
+            listIds: [],
+            listOrder: [],
+            authorId: action.authorId
+          }
+        }
+      };
     case actions.GET_CURRENT_BOARD:
       return {
         ...state,

@@ -37,11 +37,13 @@ export function saveTasks() {
 }
 
 export function getTasks() {
-  const tasks = localStorage.getItem('tasks');
-  if (tasks) {
-    return {
-      type: actions.GET_TASKS,
-      tasks: JSON.parse(tasks)
-    };
-  }
+  return (dispatch) => {
+    const tasks = localStorage.getItem('tasks');
+    if (tasks) {
+      dispatch({
+        type: actions.GET_TASKS,
+        tasks: JSON.parse(tasks)
+      });
+    }
+  };
 }

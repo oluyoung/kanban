@@ -1,16 +1,20 @@
+import { nanoid } from 'nanoid';
 import * as actions from './constants';
+import { getLists } from './list.creator';
+import { getTasks } from './task.creator';
 
-export function updateBoardListOrder(source, destination, draggableId) {
+export function addBoard(title) {
   return (dispatch, getStore) => {
-    const updatedListOrder = getStore().boards.currentBoard.listOrder.filter((_, index) => (index !== source.index));
-    updatedListOrder.splice(destination.index, 0, draggableId);
-
     dispatch({
-      type: actions.UPDATE_BOARD_LIST_ORDER,
-      updatedListOrder
+      type: actions.ADD_BOARD,
+      authorId: getStore().authors.currentAuthorId,
+      board: {
+        id: nanoid(),
+        title
+      }
     });
-    dispatch(saveBoard());
-  }
+    dispatch(saveBoards());
+  };
 }
 
 export function addList(boardId, listId) {
@@ -25,18 +29,13 @@ export function addList(boardId, listId) {
         listOrder: board.listIds.concat(listId),
       }
     });
-    dispatch(saveBoard());
-  };
-}
-
-export function saveBoard() {
-  return (_, getStore) => {
-    localStorage.setItem('board', JSON.stringify(getStore().boards.boards));
+    dispatch(saveBoards());
   };
 }
 
 export function getBoard(boardId, authorId) {
   return (dispatch, getStore) => {
+    dispatch(getBoards());
     const boards = getStore().boards.boards;
     if (!Object.keys(boards).includes(boardId)) {
       return;
@@ -52,5 +51,38 @@ export function addCurrentBoard(id) {
   return {
     type: actions.GET_CURRENT_BOARD,
     id
+  };
+}
+
+export function updateBoardListOrder(source, destination, draggableId) {
+  return (dispatch, getStore) => {
+    const updatedListOrder = getStore().boards.currentBoard.listOrder.filter((_, index) => (index !== source.index));
+    updatedListOrder.splice(destination.index, 0, draggableId);
+
+    dispatch({
+      type: actions.UPDATE_BOARD_LIST_ORDER,
+      updatedListOrder
+    });
+    dispatch(saveBoards());
+  }
+}
+
+export function saveBoards() {
+  return (_, getStore) => {
+    localStorage.setItem('boards', JSON.stringify(getStore().boards.boards));
+  };
+}
+
+export function getBoards() {
+  return (dispatch) => {
+    const boards = localStorage.getItem('boards');
+    if (boards) {
+      dispatch(getLists());
+      dispatch(getTasks());
+      dispatch({
+        type: actions.GET_BOARDS,
+        boards: JSON.parse(boards)
+      });
+    }
   };
 }
