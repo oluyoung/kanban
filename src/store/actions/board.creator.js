@@ -41,7 +41,6 @@ export function getBoard(boardId, authorId) {
     if (!Object.keys(boards).includes(boardId)) {
       return;
     }
-    console.log(authorId)
     if (boards[boardId].authorId !== authorId) {
       return;
     }

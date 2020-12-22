@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
-  padding; 0;
+  padding: 0;
   margin: 0;
-  display: block;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
 `;
 const TextArea = styled.textarea`
   border-radius: 5px;
@@ -15,18 +19,27 @@ const TextArea = styled.textarea`
   width: 100%;
   max-width: 90%;
   font-family: inherit;
+  margin-bottom: 10px;
+  resize: none;
 `;
-const Button = styled.button`
+const Add = styled.button`
   outline: none;
   border: 0;
   border-radius: 5px;
-  background-color: #a6cddf;
+  background-color: #55e360;
   color: #111;
   font-weight: bold;
   cursor: pointer;
   display: block;
   padding: 5px 12px;
-`
+  margin-right: 10px;
+`;
+const Close = styled.a`
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+`;
 
 function AddTaskInput(props) {
   const inputRef = React.useRef(null);
@@ -57,8 +70,10 @@ function AddTaskInput(props) {
         onChange={(event) => setValue(event.target.value)}
         ref={inputRef}
         placeholder="Wash hands and face" />
-      <Button
-        onClick={() => addTask()}>Add</Button>
+      <Add onClick={() => addTask()}>Add</Add>
+      <Close onClick={() => props.closeTaskInput()}>
+        <FontAwesomeIcon icon={faTimes} />
+      </Close>
     </Container>
   );
 }

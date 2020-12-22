@@ -15,11 +15,12 @@ const Container = styled.p`
   width: 95%;
   display: inline-flex;
   justify-content: space-between;
+  box-shadow: 1px 1px 3px #ccc;
 `;
 const DeleteBtn = styled.a`
   color: red;
   display: inline-block;
-`
+`;
 
 export default class Task extends PureComponent {
   render() {

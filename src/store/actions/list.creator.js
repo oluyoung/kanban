@@ -109,6 +109,7 @@ export function addList(boardId, title) {
       list: {id: listId, title, taskIds: [], authorId: getStore().authors.currentAuthorId}
     });
     dispatch(addListToBoard(boardId, listId));
+    dispatch(saveLists());
   };
 }
 

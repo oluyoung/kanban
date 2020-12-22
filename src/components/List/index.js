@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import Task from '../Task';
 import AddTaskInput from '../AddTaskInput';
 
@@ -10,26 +12,38 @@ const Container = styled.div`
   border: 1px solid lightgrey;
   border-radius: 5px;
   width: calc(20vw - 8px);
-  background-color: #e7e9ed;
+  background-color: #e6e9ed;
   display: flex;
   flex-flow: column nowrap;
 `;
-const Title = styled.h4`
-  padding: 8px;
+const Header = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+`;
+const Title = styled.h4`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+`;
+  const Menu = styled.a`
+  color: black;
+  cursor: pointer;
 `;
 const AddTaskBtn = styled.button`
   outline: none;
   border: 0;
   background-color: transparent;
+  font-weight: bold;
+  color: #66686d;
   cursor: pointer;
 `;
 const TaskList = styled.div`
   padding: 8px;
   transition: all 0.2s ease;
-  background-color: white;
+  background-color: #e6e9ed;
   flex-grow: 1;
   min-height: 100px;
 `;
@@ -68,26 +82,30 @@ export default class List extends React.Component {
             ref={provided.innerRef}
             {...provided.draggableProps}
             onKeyDown={this.onKeyDownHandle}>
-            <Title {...provided.dragHandleProps}>
-              {this.props.column.title}
-              <AddTaskBtn onClick={() => this.props.openTaskInput(this.props.column.id)}>Add</AddTaskBtn>
-            </Title>
+            <Header>
+              <Title {...provided.dragHandleProps}>{this.props.column.title}</Title>
+              <Menu><FontAwesomeIcon icon={faEllipsisH} size="lg" /></Menu>
+            </Header>
             <Droppable droppableId={this.props.column.id} type="task">
               {(provided, snapshot) => (
                 <TaskList
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  isDraggingOver={snapshot.isDraggingOver}
-                >
+                  isDraggingOver={snapshot.isDraggingOver}>
                   <InnerList
                     tasks={this.props.tasks}
                     listId={this.props.column.id}
                     removeTask={this.props.removeTask} />
-                  {(this.props.listIdWithOpenTaskInput === this.props.column.id) &&
+                  {(this.props.listIdWithOpenTaskInput === this.props.column.id) ?
                     <AddTaskInput
                       addTask={this.props.addTask}
                       listId={this.props.column.id}
-                      closeTaskInput={this.props.closeTaskInput} />}
+                      closeTaskInput={this.props.closeTaskInput} /> :
+                    <AddTaskBtn
+                      onClick={() => this.props.openTaskInput(this.props.column.id)}>
+                        + {this.props.tasks.length ? 'Add another card' : 'Add a card'}
+                    </AddTaskBtn>
+                    }
                   {provided.placeholder}
                 </TaskList>
               )}
