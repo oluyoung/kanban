@@ -41,6 +41,7 @@ const NewBoardContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  margin-top: 1.5em;
 `;
 const NewBoardInput = styled.input`
   padding: 5px;

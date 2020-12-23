@@ -1,22 +1,7 @@
 import * as actions from '../actions/constants';
 
 const initalData = {
-  boards: {
-    board1: {
-      id: 'board1',
-      title: 'Awesome Project Management',
-      listIds: ['col1', 'col2', 'col3'],
-      listOrder: ['col1', 'col2', 'col3'],
-      authorId: 'author1'
-    },
-    board2: {
-      id: 'board2',
-      title: 'Project Management',
-      listIds: [],
-      listOrder: [],
-      authorId: 'author2'
-    }
-  },
+  boards: {},
   currentBoardId: undefined,
   currentBoard: undefined
 };
