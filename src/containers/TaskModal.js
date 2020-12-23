@@ -70,7 +70,6 @@ const DeleteBtn = styled.a`
 
 class TaskModal extends React.Component {
   state = {
-    modalIsOpen: false,
     isContentInputOpen: false,
     isDescriptionInputOpen: false
   };
@@ -78,12 +77,11 @@ class TaskModal extends React.Component {
   componentDidMount() {
     if (this.props.match.params.taskId) {
       this.props.getTask(this.props.match.params.taskId);
-      this.setState({modalIsOpen: true});
     }
   }
 
   closeModal = () => {
-    this.setState({modalIsOpen: false});
+    this.props.closeModal();
     this.props.history.push(`/b/${this.props.match.params.boardId}`);
   }
 
@@ -106,7 +104,7 @@ class TaskModal extends React.Component {
     if (result) {
       this.props.removeTask(this.props.match.params.listId, this.props.task.id);
       this.props.history.push(`/b/${this.props.match.params.boardId}`);
-      this.setState({modalIsOpen: false});
+      this.closeModal();
     }
   }
 
@@ -118,7 +116,7 @@ class TaskModal extends React.Component {
       <>
       {this.props.task &&
       <Modal
-        isOpen={this.state.modalIsOpen}
+        isOpen
         onRequestClose={this.closeModal}
         style={customStyles}
         ariaHideApp={false}>

@@ -124,7 +124,7 @@ export function removeList(boardId, listId) {
       type: actions.ADD_LIST,
       lists: {...lists}
     });
-    dispatch(removeListTasks(listId, list.taskIds));
+    dispatch(removeListTasks(list.taskIds));
     dispatch(removeListFromBoard(boardId, listId));
     dispatch(saveLists());
   };

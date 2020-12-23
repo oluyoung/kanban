@@ -67,6 +67,7 @@ export function removeTask(listId, taskId) {
 export function removeListTasks(taskIds) {
   return (dispatch, getStore) => {
     const tasks = {...getStore().tasks.tasks};
+    console.log(taskIds)
     taskIds.forEach(id => {
       delete tasks[id];
     });

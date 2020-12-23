@@ -43,8 +43,19 @@ class InnerList extends React.PureComponent {
 }
 
 class Board extends Component {
+  state = {
+    modalIsOpen: false
+  };
+
   componentDidMount() {
     this.props.getBoard(this.props.match.params.boardId, this.props.authorId);
+    
+  }
+  
+  componentDidUpdate() {
+    if (this.props.match.params.taskId && !this.state.modalIsOpen) {
+      this.setState({modalIsOpen: true});
+    }
   }
 
   onDragEnd = result => {
@@ -68,6 +79,10 @@ class Board extends Component {
     } else {
       this.props.updateListsTasksOrder(source, destination, draggableId);
     }
+  }
+
+  closeModal = () => {
+    this.setState({modalIsOpen: false});
   }
 
   render() {
@@ -109,7 +124,9 @@ class Board extends Component {
             )}
           </Droppable>
         </DragDropContext>
-        <TaskModal />
+        {this.state.modalIsOpen &&
+          <TaskModal closeModal={this.closeModal} />
+        }
         </>
       );
     }
