@@ -6,7 +6,9 @@ const initialState = {
     task2: { id: 'task2', content: 'Watch my favorite show', authorId: 'author1'},
     task3: { id: 'task3', content: 'Charge my phone', authorId: 'author2'},
     task4: { id: 'task4', content: 'Cook dinner', authorId: 'author1'}
-  }
+  },
+  currentTaskId: undefined,
+  currentTask: undefined
 };
 
 export default function taskReducer(state = initialState, action) {
@@ -19,7 +21,14 @@ export default function taskReducer(state = initialState, action) {
           [action.task.id]: {
             ...action.task
           }
-        }
+        },
+        currentTask: {...action.task}
+      };
+    case actions.GET_TASK:
+      return {
+        ...state,
+        currentTaskId: action.task.id,
+        currentTask: {...action.task}
       };
     case actions.REMOVE_TASK:
     case actions.GET_TASKS:

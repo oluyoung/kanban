@@ -21,7 +21,7 @@ export function getTask(taskId) {
   return (dispatch, getStore) => {
     const task = getStore().tasks.tasks[taskId];
     dispatch({
-      type: actions.SET_TASK_IN_MODAL,
+      type: actions.GET_TASK,
       task
     });
   };
@@ -33,10 +33,7 @@ export function updateContent(taskId, content) {
     const task = getStore().tasks.tasks[taskId];
     dispatch({
       type: actions.UPDATE_TASK,
-      task: {
-        ...task,
-        content
-      }
+      task: { ...task, content }
     });
     dispatch(saveTasks());
   };
@@ -47,10 +44,7 @@ export function updateDescription(taskId, description) {
     const task = getStore().tasks.tasks[taskId];
     dispatch({
       type: actions.UPDATE_TASK,
-      task: {
-        ...task,
-        description
-      }
+      task: { ...task, description }
     });
     dispatch(saveTasks());
   };

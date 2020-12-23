@@ -22,10 +22,6 @@ const Container = styled.p`
     background-color: #e0e0e0;
   }
 `;
-const DeleteBtn = styled.a`
-  color: red;
-  display: inline-block;
-`;
 const EditPencil = styled.span``;
 
 class Task extends PureComponent {
@@ -38,15 +34,12 @@ class Task extends PureComponent {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             isDragging={snapshot.isDragging}
-            onClick={() => {this.props.history.push(`/b/${this.props.boardId}/t/${this.props.task.id}`)}}
+            onClick={() => {
+              this.props.history.push(`/b/${this.props.boardId}/l/${this.props.listId}/t/${this.props.task.id}`)
+            }}
           >
             {this.props.task.content}
-            <EditPencil>
-              <FontAwesomeIcon icon={faPenAlt} />
-            </EditPencil>
-
-            {/* <DeleteBtn onClick={() => this.props.removeTask(this.props.listId, this.props.task.id)}>
-            </DeleteBtn> */}
+            <EditPencil><FontAwesomeIcon icon={faPenAlt} /></EditPencil>
           </Container>
         )}
       </Draggable>
