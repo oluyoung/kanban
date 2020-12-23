@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import * as actions from './constants';
-import { addList as addListToBoard } from './board.creator';
+import { removeListTasks } from './task.creator';
+import { addList as addListToBoard, removeList as removeListFromBoard } from './board.creator';
 
 export function updateListTasksOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
@@ -109,6 +110,22 @@ export function addList(boardId, title) {
       list: {id: listId, title, taskIds: [], authorId: getStore().authors.currentAuthorId}
     });
     dispatch(addListToBoard(boardId, listId));
+    dispatch(saveLists());
+  };
+}
+
+export function removeList(boardId, listId) {
+  return (dispatch, getStore) => {
+    const list = {...getStore().lists.lists[listId]};
+    const lists = {...getStore().lists.lists};
+    delete lists[listId];
+
+    dispatch({
+      type: actions.ADD_LIST,
+      lists: {...lists}
+    });
+    dispatch(removeListTasks(listId, list.taskIds));
+    dispatch(removeListFromBoard(boardId, listId));
     dispatch(saveLists());
   };
 }

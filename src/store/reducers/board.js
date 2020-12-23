@@ -50,6 +50,7 @@ export default function boardReducer(state = initialState, action) {
         currentBoardId: action.id,
         currentBoard: { ...state.boards[action.id] }
       };
+    case actions.REMOVE_LIST_FROM_BOARD:
     case actions.ADD_LIST_TO_BOARD:
       return {
         ...state,

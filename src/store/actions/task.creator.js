@@ -64,6 +64,21 @@ export function removeTask(listId, taskId) {
   };
 }
 
+export function removeListTasks(taskIds) {
+  return (dispatch, getStore) => {
+    const tasks = {...getStore().tasks.tasks};
+    taskIds.forEach(id => {
+      delete tasks[id];
+    });
+
+    dispatch({
+      type: actions.REMOVE_LIST_TASKS,
+      tasks: {...tasks}
+    });
+    dispatch(saveTasks());
+  };
+}
+
 export function saveTasks() {
   return (_, getStore) => {
     localStorage.setItem('tasks', JSON.stringify(getStore().tasks.tasks));

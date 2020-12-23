@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import Task from '../Task';
 import AddTaskInput from '../AddTaskInput';
 
@@ -28,10 +28,6 @@ const Title = styled.h4`
   flex-flow: row nowrap;
   justify-content: space-between;
 `;
-  const Menu = styled.a`
-  color: black;
-  cursor: pointer;
-`;
 const AddTaskBtn = styled.button`
   outline: none;
   border: 0;
@@ -46,6 +42,13 @@ const TaskList = styled.div`
   background-color: #e6e9ed;
   flex-grow: 1;
   min-height: 100px;
+`;
+const DeleteBtn = styled.a`
+  color: red;
+  display: inline-block;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
 `;
 
 // optimize task list to not re-render on every update but only if there is a difference in tasks list handling
@@ -75,6 +78,13 @@ export default class List extends React.Component {
     }
   }
 
+  removeList = () => {
+    const result = window.confirm('Are you sure you want to remove the list?');
+    if (result) {
+      this.props.removeList(this.props.boardId, this.props.column.id);
+    }
+  }
+
   render() {
     return (
       <Draggable draggableId={this.props.column.id} index={this.props.index}>
@@ -85,7 +95,7 @@ export default class List extends React.Component {
             onKeyDown={this.onKeyDownHandle}>
             <Header>
               <Title {...provided.dragHandleProps}>{this.props.column.title}</Title>
-              <Menu><FontAwesomeIcon icon={faEllipsisH} size="lg" /></Menu>
+              <DeleteBtn onClick={this.removeList}><FontAwesomeIcon icon={faTrash} /></DeleteBtn>
             </Header>
             <Droppable droppableId={this.props.column.id} type="task">
               {(provided, snapshot) => (

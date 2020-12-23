@@ -33,6 +33,7 @@ const Close = styled.a`
   top: 16px;
   right: 16px;
   color: #111;
+  cursor: pointer;
 `;
 const Header = styled.div`
   margin-bottom: 2em;
@@ -52,7 +53,11 @@ const Edit = styled.button`
   font-weight: bold;
   cursor: pointer;
 `;
-const Description = styled.p``;
+const Description = styled.p`
+  background-color: #fafafa;
+  padding: 10px;
+  border-radius: 5px;
+`;
 const DeleteBtn = styled.a`
   color: red;
   display: inline-block;

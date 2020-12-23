@@ -13,6 +13,7 @@ import {
   updateListTasksOrder,
   updateListsTasksOrder,
   addList,
+  removeList,
   openTaskInput,
   closeTaskInput } from '../store/actions/list.creator';
 import { addTask, removeTask } from '../store/actions/task.creator';
@@ -35,6 +36,7 @@ class InnerList extends React.PureComponent {
       listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
       addTask={this.props.addTask}
       removeTask={this.props.removeTask}
+      removeList={this.props.removeList}
       boardId={this.props.boardId}
     />;
   }
@@ -69,16 +71,11 @@ class Board extends Component {
   }
 
   render() {
-    let view = (
-      <>
-        <Nav />
-        <h1>Page not found</h1>
-      </>);
+    let view = <h1>Page not found</h1>;
 
     if (this.props.currentBoard) {
       view = (
         <>
-        <Nav />
         <Header title={this.props.currentBoard.title} />
         <DragDropContext onDragEnd={this.onDragEnd}>
           <Droppable
@@ -97,12 +94,13 @@ class Board extends Component {
                     list={list}
                     taskMap={this.props.tasks}
                     index={index}
+                    boardId={this.props.currentBoard.id}
                     openTaskInput={this.props.openTaskInput}
                     closeTaskInput={this.props.closeTaskInput}
                     listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
                     addTask={this.props.addTask}
                     removeTask={this.props.removeTask}
-                    boardId={this.props.currentBoard.id} />
+                    removeList={this.props.removeList} />
                 })}
   
                 {provided.placeholder}
@@ -116,7 +114,7 @@ class Board extends Component {
       );
     }
 
-    return view;
+    return (<><Nav />{view}</>);
   }
 }
 
@@ -137,6 +135,7 @@ const mapDispatchToProps = dispatch => ({
   closeTaskInput: () => dispatch(closeTaskInput()),
   addTask: (content, listId) => dispatch(addTask(content, listId)),
   addNewList: (boardId, title) => dispatch(addList(boardId, title)),
+  removeList: (boardId, listId) => dispatch(removeList(boardId, listId)),
   removeTask: (content, listId) => dispatch(removeTask(content, listId)),
   getBoard: (boardId, authorId) => dispatch(getBoard(boardId, authorId))
 });

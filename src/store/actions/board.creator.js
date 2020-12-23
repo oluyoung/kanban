@@ -20,13 +20,29 @@ export function addBoard(title) {
 export function addList(boardId, listId) {
   return (dispatch, getStore) => {
     const board = {...getStore().boards.boards[boardId]};
-
+    const updatedListIds = board.listIds.concat(listId);
     dispatch({
       type: actions.ADD_LIST_TO_BOARD,
       updatedBoard: {
         ...board,
-        listIds: board.listIds.concat(listId),
-        listOrder: board.listIds.concat(listId),
+        listIds: updatedListIds,
+        listOrder: updatedListIds
+      }
+    });
+    dispatch(saveBoards());
+  };
+}
+
+export function removeList(boardId, listId) {
+  return (dispatch, getStore) => {
+    const board = {...getStore().boards.boards[boardId]};
+    const updatedListIds = board.listOrder.filter(id => (listId !== id));
+    dispatch({
+      type: actions.ADD_LIST_TO_BOARD,
+      updatedBoard: {
+        ...board,
+        listIds: updatedListIds,
+        listOrder: updatedListIds
       }
     });
     dispatch(saveBoards());
