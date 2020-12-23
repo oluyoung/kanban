@@ -25,3 +25,15 @@ export function getAuthorBoards(state, authorId) {
     return boards;
   }, []);
 }
+
+export function getAuthorsList(state) {
+  return Object.keys(state.authors.authors).map((authorId) => {
+    return state.authors.authors[authorId];
+  });
+}
+
+export function getAuthorUsernames(state) {
+  return Object.keys(state.authors.authors).map((authorId) => {
+    return state.authors.authors[authorId].username;
+  });
+}

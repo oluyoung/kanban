@@ -1,23 +1,37 @@
+import * as actions from '../actions/constants';
+
 const initialState = {
-  authors: {
-    author1: {
-      id: 'author1',
-      username: 'yomi'
-    },
-    author2: {
-      id: 'author2',
-      username: 'tim'
-    }
-  },
-  currentAuthorId: 'author1',
-  currentAuthor: {
-    id: 'author1',
-    username: 'yomi'
-  }
+  authors: {},
+  currentAuthorId: undefined,
+  currentAuthor: undefined
 };
 
 export default function authorReducer(state = initialState, action) {
   switch (action.type) {
+    case actions.SET_AUTHOR:
+      return {
+        ...state,
+        currentAuthorId: action.author.id,
+        currentAuthor: {...action.author}
+      };
+    case actions.ADD_AUTHOR:
+      return {
+        ...state,
+        authors: {
+          ...state.authors,
+          [action.author.id]: {...action.author}
+        }
+      };
+    case actions.GET_AUTHORS:
+      return {
+        ...action.authors
+      };
+    case actions.LOGOUT:
+      return {
+        ...state,
+        currentAuthorId: undefined,
+        currentAuthor: undefined
+      }
     default:
       return state;
   }

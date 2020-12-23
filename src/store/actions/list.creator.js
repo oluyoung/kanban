@@ -3,59 +3,6 @@ import * as actions from './constants';
 import { removeListTasks } from './task.creator';
 import { addList as addListToBoard, removeList as removeListFromBoard } from './board.creator';
 
-export function updateListTasksOrder(source, destination, draggableId) {
-  return (dispatch, getStore) => {
-    const list = getStore().lists.lists[source.droppableId];
-
-    const taskIds = list.taskIds.filter((_, index) => (index !== source.index));
-    taskIds.splice(destination.index, 0, draggableId);
-
-    const updatedLists = {
-      ...getStore().lists.lists,
-      [list.id]: {
-        ...list,
-        taskIds: [...taskIds]
-      }
-    };
-
-    dispatch({
-      type: actions.UPDATE_LISTS,
-      updatedLists
-    });
-    dispatch(saveLists());
-  };
-}
-
-export function updateListsTasksOrder(source, destination, draggableId) {
-  return (dispatch, getStore) => {
-    const startList = getStore().lists.lists[source.droppableId];
-    const endList = getStore().lists.lists[destination.droppableId];
-
-    const startListTaskIds = startList.taskIds.filter((_, index) => (index !== source.index));
-
-    const endListTaskIds = Array.from(endList.taskIds);
-    endListTaskIds.splice(destination.index, 0, draggableId);
-
-    const updatedLists = {
-      ...getStore().lists.lists,
-      [startList.id]: {
-        ...startList,
-        taskIds: [...startListTaskIds]
-      },
-      [endList.id]: {
-        ...endList,
-        taskIds: [...endListTaskIds]
-      }
-    };
-
-    dispatch({
-      type: actions.UPDATE_LISTS,
-      updatedLists
-    });
-    dispatch(saveLists());
-  };
-}
-
 export function openTaskInput(listId) {
   return {
     type: actions.OPEN_TASK_INPUT,
@@ -126,6 +73,59 @@ export function removeList(boardId, listId) {
     });
     dispatch(removeListTasks(list.taskIds));
     dispatch(removeListFromBoard(boardId, listId));
+    dispatch(saveLists());
+  };
+}
+
+export function updateListTasksOrder(source, destination, draggableId) {
+  return (dispatch, getStore) => {
+    const list = getStore().lists.lists[source.droppableId];
+
+    const taskIds = list.taskIds.filter((_, index) => (index !== source.index));
+    taskIds.splice(destination.index, 0, draggableId);
+
+    const updatedLists = {
+      ...getStore().lists.lists,
+      [list.id]: {
+        ...list,
+        taskIds: [...taskIds]
+      }
+    };
+
+    dispatch({
+      type: actions.UPDATE_LISTS,
+      updatedLists
+    });
+    dispatch(saveLists());
+  };
+}
+
+export function updateListsTasksOrder(source, destination, draggableId) {
+  return (dispatch, getStore) => {
+    const startList = getStore().lists.lists[source.droppableId];
+    const endList = getStore().lists.lists[destination.droppableId];
+
+    const startListTaskIds = startList.taskIds.filter((_, index) => (index !== source.index));
+
+    const endListTaskIds = Array.from(endList.taskIds);
+    endListTaskIds.splice(destination.index, 0, draggableId);
+
+    const updatedLists = {
+      ...getStore().lists.lists,
+      [startList.id]: {
+        ...startList,
+        taskIds: [...startListTaskIds]
+      },
+      [endList.id]: {
+        ...endList,
+        taskIds: [...endListTaskIds]
+      }
+    };
+
+    dispatch({
+      type: actions.UPDATE_LISTS,
+      updatedLists
+    });
     dispatch(saveLists());
   };
 }

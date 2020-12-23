@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Logout from '../Logout';
 
 const Container = styled.div`
   background-color: #657d8a;
@@ -27,14 +28,13 @@ const Boards = styled.a`
   display: block;
 `;
 
-function Nav() {
+export default function Nav(props) {
   return (
     <Container>
       <Inner>
-        <Link to="/" component={(props) => <Boards {...props}>Boards</Boards> } />
+        <Link to="/boards" component={(props) => <Boards {...props}>Boards</Boards> } />
+        <Logout logout={props.logout} />
       </Inner>
     </Container>
   );
 }
-
-export default Nav;

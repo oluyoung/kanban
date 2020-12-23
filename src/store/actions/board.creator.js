@@ -51,7 +51,6 @@ export function removeList(boardId, listId) {
 
 export function getBoard(boardId, authorId) {
   return (dispatch, getStore) => {
-    dispatch(getBoards());
     const boards = getStore().boards.boards;
     if (!Object.keys(boards).includes(boardId)) {
       return;

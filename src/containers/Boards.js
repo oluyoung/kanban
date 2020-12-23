@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import Logout from '../components/Logout';
 import { getAuthorBoards } from '../store/selectors';
+import { getAuthor, logout } from '../store/actions/author.creator';
 import { addBoard, getBoards } from '../store/actions/board.creator';
 
 const Container = styled.div`
@@ -18,6 +20,10 @@ const Header = styled.div`
   margin-bottom: 1em;
 `;
 const YourBoardsText = styled.h1``;
+const HeaderButtons = styled.div`
+  display: flex;
+  align-items: center;
+`;
 const NewBoardButton = styled.a`
   display: block;
   color: white;
@@ -27,6 +33,7 @@ const NewBoardButton = styled.a`
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  margin-right: 10px;
 `;
 const NoBoardsText = styled.h2``;
 const BoardsListView = styled.div``;
@@ -53,22 +60,22 @@ const NewBoardInput = styled.input`
   }
 `;
 const NewBoardInputSubmit = styled.button`
-  border-radius: 5px;
-  padding: 5px;
-  cursor: pointer;
-`;
-const NewBoardInputCancel = styled.button`
+  outline: none;
   border: 0;
-  background-color: transparent;
-  color: red;
-  padding: 5px;
-  margin-left: 10px;
+  border-radius: 5px;
+  background-color: #55e360;
+  color: #111;
+  font-weight: bold;
   cursor: pointer;
-
-  &:focus,
-  &:hover {
-    text-decoration: underline;
-  }
+  display: block;
+  padding: 5px 12px;
+  margin-right: 10px;
+`;
+const NewBoardInputCancel = styled.a`
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
 `;
 
 class Boards extends Component {
@@ -83,19 +90,25 @@ class Boards extends Component {
   };
 
   componentDidMount() {
+    this.props.getAuthor();
     this.props.getBoards();
   }
 
   componentDidUpdate() {
-    if (this.state.isInputOpen) {
-      this.inputRef.current.focus();
+    if (!this.props.author) {
+      this.props.history.push(`/`);
     }
+  }
+
+  logout = () => {
+    this.props.logout();
+    this.props.history.push(`/`);
   }
 
   handleSubmit = () => {
     if (Boolean(this.state.title.trim())) {
       this.props.addBoard(this.state.title);
-      this.setState({isInputOpen: false})
+      this.setState({isInputOpen: false});
     } else {
       this.inputRef.current.focus();
     }
@@ -112,7 +125,10 @@ class Boards extends Component {
       <Container>
         <Header>
           <YourBoardsText>Your boards</YourBoardsText>
-          <NewBoardButton onClick={() => this.setState({isInputOpen: true})}>Add Board</NewBoardButton>
+          <HeaderButtons>
+            <NewBoardButton onClick={() => this.setState({isInputOpen: true})}>Add Board</NewBoardButton>
+            <Logout logout={this.logout} />
+          </HeaderButtons>
         </Header>
         {this.props.boards.length ?
           (<BoardsListView>{boardsListView}</BoardsListView>) :
@@ -139,8 +155,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  getAuthor: () => dispatch(getAuthor()),
   getBoards: () => dispatch(getBoards()),
-  addBoard: (title) => dispatch(addBoard(title))
+  addBoard: (title) => dispatch(addBoard(title)),
+  logout: () => dispatch(logout())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Boards);

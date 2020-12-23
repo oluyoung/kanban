@@ -8,6 +8,7 @@ import List from '../components/List';
 import AddList from '../components/AddList';
 import TaskModal from './TaskModal';
 import { getBoardLists } from '../store/selectors';
+import { getAuthors, logout } from '../store/actions/author.creator';
 import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
 import {
   updateListTasksOrder,
@@ -29,6 +30,7 @@ class InnerList extends React.PureComponent {
   render() {
     const { list, taskMap, index } = this.props;
     const tasks = list.taskIds.map(taskId => taskMap[taskId]);
+
     return <List
       column={list} tasks={tasks} index={index}
       openTaskInput={this.props.openTaskInput}
@@ -48,8 +50,10 @@ class Board extends Component {
   };
 
   componentDidMount() {
-    this.props.getBoard(this.props.match.params.boardId, this.props.authorId);
-    
+    this.props.getAuthors();
+    setTimeout(() => {
+      this.props.getBoard(this.props.match.params.boardId, this.props.authorId);
+    })
   }
   
   componentDidUpdate() {
@@ -83,6 +87,11 @@ class Board extends Component {
 
   closeModal = () => {
     this.setState({modalIsOpen: false});
+  }
+
+  logout = () => {
+    this.props.logout();
+    this.props.history.push(`/`);
   }
 
   render() {
@@ -131,7 +140,7 @@ class Board extends Component {
       );
     }
 
-    return (<><Nav />{view}</>);
+    return (<><Nav logout={this.logout} />{view}</>);
   }
 }
 
@@ -154,7 +163,9 @@ const mapDispatchToProps = dispatch => ({
   addNewList: (boardId, title) => dispatch(addList(boardId, title)),
   removeList: (boardId, listId) => dispatch(removeList(boardId, listId)),
   removeTask: (content, listId) => dispatch(removeTask(content, listId)),
-  getBoard: (boardId, authorId) => dispatch(getBoard(boardId, authorId))
+  getBoard: (boardId, authorId) => dispatch(getBoard(boardId, authorId)),
+  getAuthors: () => dispatch(getAuthors()),
+  logout: () => dispatch(logout())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);
