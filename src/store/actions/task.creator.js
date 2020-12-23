@@ -2,7 +2,8 @@ import { nanoid } from 'nanoid';
 import * as actions from './constants';
 import {
   addTask as addTaskToList,
-  removeTask as removeTaskFromList } from './list.creator';
+  removeTask as removeTaskFromList
+} from './list.creator';
 
 export function addTask(content, listId) {
   return (dispatch, getStore) => {
@@ -12,6 +13,45 @@ export function addTask(content, listId) {
       task: { id: taskId, content, authorId: getStore().authors.currentAuthorId }
     });
     dispatch(addTaskToList(listId, taskId));
+    dispatch(saveTasks());
+  };
+}
+
+export function getTask(taskId) {
+  return (dispatch, getStore) => {
+    const task = getStore().tasks.tasks[taskId];
+    dispatch({
+      type: actions.SET_TASK_IN_MODAL,
+      task
+    });
+  };
+}
+
+export function updateContent(taskId, content) {
+  return (dispatch, getStore) => {
+    console.log(content)
+    const task = getStore().tasks.tasks[taskId];
+    dispatch({
+      type: actions.UPDATE_TASK,
+      task: {
+        ...task,
+        content
+      }
+    });
+    dispatch(saveTasks());
+  };
+}
+
+export function updateDescription(taskId, description) {
+  return (dispatch, getStore) => {
+    const task = getStore().tasks.tasks[taskId];
+    dispatch({
+      type: actions.UPDATE_TASK,
+      task: {
+        ...task,
+        description
+      }
+    });
     dispatch(saveTasks());
   };
 }

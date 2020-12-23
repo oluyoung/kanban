@@ -102,7 +102,7 @@ class Boards extends Component {
 
   render() {
     const boardsListView = this.props.boards.map(board => {
-      return <Link key={board.id} to={`/${board.id}`} component={(props) => {
+      return <Link key={board.id} to={`/b/${board.id}`} component={(props) => {
         return <BoardItem {...props}>{board.title}</BoardItem>
       }} />;
     });

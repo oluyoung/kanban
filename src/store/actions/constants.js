@@ -4,6 +4,7 @@ export const GET_TASKS = 'GET_TASKS';
 export const ADD_TASK = 'ADD_TASK';
 export const REMOVE_TASK = 'REMOVE_TASK'
 export const REORDER_TASK = 'REORDER_TASK';
+export const UPDATE_TASK = 'UPDATE_TASK';
 
 // LIST
 export const GET_LISTS = 'GET_LISTS';
@@ -22,3 +23,7 @@ export const GET_BOARDS = 'GET_BOARDS';
 export const UPDATE_BOARD_LIST_ORDER = 'UPDATE_BOARD_LIST_ORDER';
 export const ADD_LIST_TO_BOARD = 'ADD_LIST_TO_BOARD';
 export const GET_CURRENT_BOARD = 'GET_CURRENT_BOARD';
+
+// MODAL
+export const SET_MODAL_NAME = 'SET_MODAL_NAME';
+export const SET_TASK_IN_MODAL = 'SET_TASK_IN_MODAL';

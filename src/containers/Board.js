@@ -6,6 +6,7 @@ import Nav from '../components/Nav';
 import Header from '../components/Header';
 import List from '../components/List';
 import AddList from '../components/AddList';
+import TaskModal from './TaskModal';
 import { getBoardLists } from '../store/selectors';
 import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
 import {
@@ -34,13 +35,14 @@ class InnerList extends React.PureComponent {
       listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
       addTask={this.props.addTask}
       removeTask={this.props.removeTask}
+      boardId={this.props.boardId}
     />;
   }
 }
 
 class Board extends Component {
   componentDidMount() {
-    this.props.getBoard(this.props.match.params.id, this.props.authorId);
+    this.props.getBoard(this.props.match.params.boardId, this.props.authorId);
   }
 
   onDragEnd = result => {
@@ -99,7 +101,8 @@ class Board extends Component {
                     closeTaskInput={this.props.closeTaskInput}
                     listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
                     addTask={this.props.addTask}
-                    removeTask={this.props.removeTask} />
+                    removeTask={this.props.removeTask}
+                    boardId={this.props.currentBoard.id} />
                 })}
   
                 {provided.placeholder}
@@ -108,6 +111,7 @@ class Board extends Component {
             )}
           </Droppable>
         </DragDropContext>
+        <TaskModal />
         </>
       );
     }

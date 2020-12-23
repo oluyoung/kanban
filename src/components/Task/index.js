@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPenAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.p`
   margin: 0;
@@ -16,13 +17,18 @@ const Container = styled.p`
   display: inline-flex;
   justify-content: space-between;
   box-shadow: 1px 1px 3px #ccc;
+  &:hover,
+  &:focus {
+    background-color: #e0e0e0;
+  }
 `;
 const DeleteBtn = styled.a`
   color: red;
   display: inline-block;
 `;
+const EditPencil = styled.span``;
 
-export default class Task extends PureComponent {
+class Task extends PureComponent {
   render() {
     return (
       <Draggable draggableId={this.props.task.id} index={this.props.index}>
@@ -32,14 +38,20 @@ export default class Task extends PureComponent {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             isDragging={snapshot.isDragging}
+            onClick={() => {this.props.history.push(`/b/${this.props.boardId}/t/${this.props.task.id}`)}}
           >
             {this.props.task.content}
-            <DeleteBtn onClick={() => this.props.removeTask(this.props.listId, this.props.task.id)}>
-              <FontAwesomeIcon icon={faTrashAlt} size="lg" />
-            </DeleteBtn>
+            <EditPencil>
+              <FontAwesomeIcon icon={faPenAlt} />
+            </EditPencil>
+
+            {/* <DeleteBtn onClick={() => this.props.removeTask(this.props.listId, this.props.task.id)}>
+            </DeleteBtn> */}
           </Container>
         )}
       </Draggable>
     );
   }
 }
+
+export default withRouter(Task);

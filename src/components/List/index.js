@@ -62,7 +62,8 @@ class InnerList extends React.Component {
     return this.props.tasks.map((task, idx) => {
       return <Task key={task.id} task={task} index={idx}
         listId={this.props.listId}
-        removeTask={this.props.removeTask} />
+        removeTask={this.props.removeTask}
+        boardId={this.props.boardId} />
     });
   }
 }
@@ -95,7 +96,8 @@ export default class List extends React.Component {
                   <InnerList
                     tasks={this.props.tasks}
                     listId={this.props.column.id}
-                    removeTask={this.props.removeTask} />
+                    removeTask={this.props.removeTask}
+                    boardId={this.props.boardId} />
                   {(this.props.listIdWithOpenTaskInput === this.props.column.id) ?
                     <AddTaskInput
                       addTask={this.props.addTask}

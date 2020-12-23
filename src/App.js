@@ -8,7 +8,8 @@ function App() {
     <>
       <BrowserRouter>
         <Route exact path="/" component={Boards} />
-        <Route exact path="/:id" component={Board} />
+        <Route exact path="/b/:boardId" component={Board} />
+        <Route exact path="/b/:boardId/t/:taskId" component={Board} />
       </BrowserRouter>
     </>
   );
