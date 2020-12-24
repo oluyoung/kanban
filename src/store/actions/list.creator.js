@@ -1,7 +1,9 @@
 import { nanoid } from 'nanoid';
 import * as actions from './constants';
 import { removeListTasks } from './task.creator';
-import { addList as addListToBoard, removeList as removeListFromBoard } from './board.creator';
+import {
+  addList as addListToBoard,
+  removeList as removeListFromBoard } from './board.creator';
 
 export function openTaskInput(listId) {
   return {
@@ -28,7 +30,6 @@ export function addTask(listId, taskId) {
       type: actions.ADD_TASK_TO_LIST,
       updatedList
     });
-    dispatch(saveLists());
   };
 }
 
@@ -44,7 +45,6 @@ export function removeTask(listId, taskId) {
       type: actions.REMOVE_TASK_FROM_LIST,
       updatedList
     });
-    dispatch(saveLists());
   }
 }
 
@@ -57,7 +57,6 @@ export function addList(boardId, title) {
       list: {id: listId, title, taskIds: [], authorId: getStore().authors.currentAuthorId}
     });
     dispatch(addListToBoard(boardId, listId));
-    dispatch(saveLists());
   };
 }
 
@@ -73,7 +72,6 @@ export function removeList(boardId, listId) {
     });
     dispatch(removeListTasks(list.taskIds));
     dispatch(removeListFromBoard(boardId, listId));
-    dispatch(saveLists());
   };
 }
 
@@ -96,7 +94,6 @@ export function updateListTasksOrder(source, destination, draggableId) {
       type: actions.UPDATE_LISTS,
       updatedLists
     });
-    dispatch(saveLists());
   };
 }
 
@@ -126,24 +123,5 @@ export function updateListsTasksOrder(source, destination, draggableId) {
       type: actions.UPDATE_LISTS,
       updatedLists
     });
-    dispatch(saveLists());
-  };
-}
-
-export function saveLists() {
-  return (_, getStore) => {
-    localStorage.setItem('lists', JSON.stringify(getStore().lists.lists));
-  };
-}
-
-export function getLists() {
-  return (dispatch) => {
-    const lists = localStorage.getItem('lists');
-    if (lists) {
-      dispatch({
-        type: actions.GET_LISTS,
-        lists: JSON.parse(lists)
-      });
-    }
   };
 }

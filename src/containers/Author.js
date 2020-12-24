@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { addAuthor, getAuthors, setCurrentAuthor } from '../store/actions/author.creator';
+import { addAuthor, setCurrentAuthor } from '../store/actions/author.creator';
 import { getAuthorsList, getAuthorUsernames } from '../store/selectors';
 
 const Container = styled.div`
@@ -84,10 +84,6 @@ class User extends React.Component {
     this.inputRef = React.createRef();
   }
 
-  componentDidMount() {
-    this.props.getAuthors();
-  }
-
   handleSubmit = () => {
     if (Boolean(this.state.username.trim())) {
       if (
@@ -147,7 +143,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addAuthor: (username) => dispatch(addAuthor(username)),
-  getAuthors: () => dispatch(getAuthors()),
   setCurrentAuthor: (id) => dispatch(setCurrentAuthor(id))
 });
 

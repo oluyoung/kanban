@@ -13,7 +13,6 @@ export function addTask(content, listId) {
       task: { id: taskId, content, authorId: getStore().authors.currentAuthorId }
     });
     dispatch(addTaskToList(listId, taskId));
-    dispatch(saveTasks());
   };
 }
 
@@ -35,7 +34,6 @@ export function updateContent(taskId, content) {
       type: actions.UPDATE_TASK,
       task: { ...task, content }
     });
-    dispatch(saveTasks());
   };
 }
 
@@ -46,7 +44,6 @@ export function updateDescription(taskId, description) {
       type: actions.UPDATE_TASK,
       task: { ...task, description }
     });
-    dispatch(saveTasks());
   };
 }
 
@@ -60,7 +57,6 @@ export function removeTask(listId, taskId) {
       tasks: {...tasks}
     });
     dispatch(removeTaskFromList(listId, taskId));
-    dispatch(saveTasks());
   };
 }
 
@@ -76,24 +72,5 @@ export function removeListTasks(taskIds) {
       type: actions.REMOVE_LIST_TASKS,
       tasks: {...tasks}
     });
-    dispatch(saveTasks());
-  };
-}
-
-export function saveTasks() {
-  return (_, getStore) => {
-    localStorage.setItem('tasks', JSON.stringify(getStore().tasks.tasks));
-  };
-}
-
-export function getTasks() {
-  return (dispatch) => {
-    const tasks = localStorage.getItem('tasks');
-    if (tasks) {
-      dispatch({
-        type: actions.GET_TASKS,
-        tasks: JSON.parse(tasks)
-      });
-    }
   };
 }

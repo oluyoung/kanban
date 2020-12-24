@@ -1,7 +1,5 @@
 import { nanoid } from 'nanoid';
 import * as actions from './constants';
-import { getLists } from './list.creator';
-import { getTasks } from './task.creator';
 
 export function addBoard(title) {
   return (dispatch, getStore) => {
@@ -13,7 +11,6 @@ export function addBoard(title) {
         title
       }
     });
-    dispatch(saveBoards());
   };
 }
 
@@ -29,7 +26,6 @@ export function addList(boardId, listId) {
         listOrder: updatedListIds
       }
     });
-    dispatch(saveBoards());
   };
 }
 
@@ -45,7 +41,6 @@ export function removeList(boardId, listId) {
         listOrder: updatedListIds
       }
     });
-    dispatch(saveBoards());
   };
 }
 
@@ -69,6 +64,12 @@ export function addCurrentBoard(id) {
   };
 }
 
+export function removeCurrentBoard() {
+  return {
+    type: actions.REMOVE_CURRENT_BOARD
+  };
+}
+
 export function updateBoardListOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
     const updatedListOrder = getStore().boards.currentBoard.listOrder.filter((_, index) => (index !== source.index));
@@ -78,26 +79,5 @@ export function updateBoardListOrder(source, destination, draggableId) {
       type: actions.UPDATE_BOARD_LIST_ORDER,
       updatedListOrder
     });
-    dispatch(saveBoards());
   }
-}
-
-export function saveBoards() {
-  return (_, getStore) => {
-    localStorage.setItem('boards', JSON.stringify(getStore().boards.boards));
-  };
-}
-
-export function getBoards() {
-  return (dispatch) => {
-    const boards = localStorage.getItem('boards');
-    if (boards) {
-      dispatch(getLists());
-      dispatch(getTasks());
-      dispatch({
-        type: actions.GET_BOARDS,
-        boards: JSON.parse(boards)
-      });
-    }
-  };
 }

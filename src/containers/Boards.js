@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Logout from '../components/Logout';
 import { getAuthorBoards } from '../store/selectors';
-import { getAuthor, logout } from '../store/actions/author.creator';
-import { addBoard, getBoards } from '../store/actions/board.creator';
+import { logout } from '../store/actions/author.creator';
+import { addBoard } from '../store/actions/board.creator';
 
 const Container = styled.div`
   margin: auto;
@@ -90,11 +90,6 @@ class Boards extends Component {
   };
 
   componentDidMount() {
-    this.props.getAuthor();
-    this.props.getBoards();
-  }
-
-  componentDidUpdate() {
     if (!this.props.author) {
       this.props.history.push(`/`);
     }
@@ -155,8 +150,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getAuthor: () => dispatch(getAuthor()),
-  getBoards: () => dispatch(getBoards()),
   addBoard: (title) => dispatch(addBoard(title)),
   logout: () => dispatch(logout())
 });

@@ -6,17 +6,6 @@ interface Task {
   content: string;
   authorId: string;
   description?: string;
-  commentIds?: string[];
-}
-```
-
-#### Comment
-
-```ts
-interface Comment {
-  id: string;
-  content: string;
-  authorId: string;
 }
 ```
 

@@ -8,7 +8,7 @@ import List from '../components/List';
 import AddList from '../components/AddList';
 import TaskModal from './TaskModal';
 import { getBoardLists } from '../store/selectors';
-import { getAuthors, logout } from '../store/actions/author.creator';
+import { logout } from '../store/actions/author.creator';
 import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
 import {
   updateListTasksOrder,
@@ -50,10 +50,7 @@ class Board extends Component {
   };
 
   componentDidMount() {
-    this.props.getAuthors();
-    setTimeout(() => {
-      this.props.getBoard(this.props.match.params.boardId, this.props.authorId);
-    })
+    this.props.getBoard(this.props.match.params.boardId, this.props.authorId);
   }
   
   componentDidUpdate() {
@@ -164,7 +161,6 @@ const mapDispatchToProps = dispatch => ({
   removeList: (boardId, listId) => dispatch(removeList(boardId, listId)),
   removeTask: (content, listId) => dispatch(removeTask(content, listId)),
   getBoard: (boardId, authorId) => dispatch(getBoard(boardId, authorId)),
-  getAuthors: () => dispatch(getAuthors()),
   logout: () => dispatch(logout())
 });
 
