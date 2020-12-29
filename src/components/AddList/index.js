@@ -8,10 +8,11 @@ const Container = styled.div`
 	margin-top: 0;
 	border: 1px solid lightgrey;
 	border-radius: 5px;
-	width: calc(20vw - 8px);
+	width: calc(20% - 8px);
 	background-color: #e7e9ed;
 	display: flex;
 	flex-flow: column nowrap;
+	flex-shrink: 0;
 `;
 const Button = styled.button`
 	border: 0;

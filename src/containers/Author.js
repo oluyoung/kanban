@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { addAuthor, setCurrentAuthor } from '../store/actions/author.creator';
 import { getAuthorsList, getAuthorUsernames } from '../store/selectors';
 
@@ -29,21 +29,36 @@ const NewAuthorButton = styled.a`
   border-radius: 5px;
   cursor: pointer;
 `;
-const NoBoardsText = styled.h2``;
-const AuthorsListView = styled.div``;
-const BoardsItem = styled.a`
-  display: block;
+const NoAuthorsText = styled.h2``;
+const AuthorsListView = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+`;
+const AuthorItem = styled.a`
+  display: flex;
   padding: 10px 0;
   border-radius: 5px;
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  width: calc(25% - 1.5em);
+  margin-right: 1.5em;
+  margin-bottom: 1.5em;
 `;
 const NewAuthorContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
   margin-top: 1.5em;
+`;
+const AuthorName = styled.span`
+  display: nlock;
+  font-size: 16px;
 `;
 const NewAuthorInput = styled.input`
   padding: 5px;
@@ -108,7 +123,11 @@ class User extends React.Component {
 
   render() {
     const authorsListView = this.props.authors.map(author => {
-      return <BoardsItem key={author.id} onClick={() => this.setAuthor(author.id)}>{author.username}</BoardsItem>
+      return (
+      <AuthorItem key={author.id} onClick={() => this.setAuthor(author.id)}>
+        <FontAwesomeIcon icon={faUserCircle} size="7x" />
+        <AuthorName>{author.username}</AuthorName>
+      </AuthorItem>);
     });
 
     return (
@@ -119,7 +138,7 @@ class User extends React.Component {
         </Header>
         {this.props.authors.length ?
           (<AuthorsListView>{authorsListView}</AuthorsListView>) :
-          (<NoBoardsText>There are no authors yet</NoBoardsText>)}
+          (<NoAuthorsText>There are no authors yet</NoAuthorsText>)}
         {this.state.isInputOpen ?
           <NewAuthorContainer>
             <NewAuthorInput

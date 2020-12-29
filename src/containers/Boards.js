@@ -7,10 +7,18 @@ import { getAuthorBoards } from '../store/selectors';
 import { logout } from '../store/actions/author.creator';
 import { addBoard } from '../store/actions/board.creator';
 
+function generateRandomColor() {
+  let randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+  if (randomColor.length !== 7){ // In any case, the color code is invalid
+    randomColor = generateRandomColor();
+  }
+  return randomColor;
+}
+
 const Container = styled.div`
   margin: auto;
   margin-top: 5vh;
-  max-width: 540px;
+  max-width: 720px;
 `;
 const Header = styled.div`
   display: flex;
@@ -36,13 +44,29 @@ const NewBoardButton = styled.a`
   margin-right: 10px;
 `;
 const NoBoardsText = styled.h2``;
-const BoardsListView = styled.div``;
+const BoardsListView = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+`;
 const BoardItem = styled.a`
   display: block;
-  padding: 10px 0;
-  border-radius: 5px;
   font-weight: bold;
   font-size: 16px;
+  position: relative;
+  width: calc(33.3333% - 1.5em);
+  margin-right: 1.5em;
+  background-color: #212121;
+  min-height: 85px;
+  margin-bottom: 1.5em;
+  border-radius: 3px;
+`;
+const BoardItemText = styled.span`
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  color: #fff;
 `;
 const NewBoardContainer = styled.div`
   display: flex;
@@ -112,7 +136,11 @@ class Boards extends Component {
   render() {
     const boardsListView = this.props.boards.map(board => {
       return <Link key={board.id} to={`/b/${board.id}`} component={(props) => {
-        return <BoardItem {...props}>{board.title}</BoardItem>
+        return (
+          <BoardItem {...props} style={{backgroundColor: generateRandomColor()}}>
+            <BoardItemText>{board.title}</BoardItemText>
+          </BoardItem>
+        );
       }} />;
     });
 

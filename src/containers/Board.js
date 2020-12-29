@@ -20,10 +20,19 @@ import {
 import { addTask, removeTask } from '../store/actions/task.creator';
 
 const Container = styled.div`
+  max-width: 100%;
+  padding-right: 8px;
+`;
+const InnerContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  jusify-content: flex-start;
+  justify-content: flex-start;
   align-items: flex-start;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 class InnerList extends React.PureComponent {
@@ -107,25 +116,26 @@ class Board extends Component {
               <Container
                 {...provided.droppableProps}
                 ref={provided.innerRef}>
-  
-                {this.props.currentBoard.listOrder.map((listId, index) => {
-                  const list = this.props.lists.find(list => (listId === list.id));
-                  return <InnerList
-                    key={list.id}
-                    list={list}
-                    taskMap={this.props.tasks}
-                    index={index}
-                    boardId={this.props.currentBoard.id}
-                    openTaskInput={this.props.openTaskInput}
-                    closeTaskInput={this.props.closeTaskInput}
-                    listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
-                    addTask={this.props.addTask}
-                    removeTask={this.props.removeTask}
-                    removeList={this.props.removeList} />
-                })}
-  
-                {provided.placeholder}
-                <AddList boardId={this.props.currentBoard.id} addNewList={this.props.addNewList} />
+                <InnerContainer>
+                  {this.props.currentBoard.listOrder.map((listId, index) => {
+                    const list = this.props.lists.find(list => (listId === list.id));
+                    return <InnerList
+                      key={list.id}
+                      list={list}
+                      taskMap={this.props.tasks}
+                      index={index}
+                      boardId={this.props.currentBoard.id}
+                      openTaskInput={this.props.openTaskInput}
+                      closeTaskInput={this.props.closeTaskInput}
+                      listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
+                      addTask={this.props.addTask}
+                      removeTask={this.props.removeTask}
+                      removeList={this.props.removeList} />
+                  })}
+    
+                  {provided.placeholder}
+                  <AddList boardId={this.props.currentBoard.id} addNewList={this.props.addNewList} />
+                </InnerContainer>
               </Container>
             )}
           </Droppable>

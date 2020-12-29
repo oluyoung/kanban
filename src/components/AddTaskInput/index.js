@@ -17,7 +17,7 @@ const TextArea = styled.textarea`
   max-height: 30px;
   min-height: 30px;
   width: 100%;
-  max-width: 90%;
+  max-width: 95%;
   font-family: inherit;
   margin-bottom: 10px;
   resize: none;
