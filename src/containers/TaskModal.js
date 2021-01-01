@@ -53,10 +53,11 @@ const Edit = styled.button`
   font-weight: bold;
   cursor: pointer;
 `;
-const Description = styled.p`
+const Description = styled.pre`
   background-color: #fafafa;
   padding: 10px;
   border-radius: 5px;
+  font-family: arial;
 `;
 const DeleteBtn = styled.a`
   color: red;

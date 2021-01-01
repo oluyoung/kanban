@@ -114,6 +114,7 @@ export default class List extends React.Component {
                     <AddTaskInput
                       addTask={this.props.addTask}
                       listId={this.props.column.id}
+                      boardId={this.props.boardId}
                       closeTaskInput={this.props.closeTaskInput} /> :
                     <AddTaskBtn
                       onClick={() => this.props.openTaskInput(this.props.column.id)}>

@@ -166,7 +166,7 @@ const mapDispatchToProps = dispatch => ({
   updateListsTasksOrder: (source, destination, draggableId) => dispatch(updateListsTasksOrder(source, destination, draggableId)),
   openTaskInput: (listId) => dispatch(openTaskInput(listId)),
   closeTaskInput: () => dispatch(closeTaskInput()),
-  addTask: (content, listId) => dispatch(addTask(content, listId)),
+  addTask: (content, listId, boardId) => dispatch(addTask(content, listId, boardId)),
   addNewList: (boardId, title) => dispatch(addList(boardId, title)),
   removeList: (boardId, listId) => dispatch(removeList(boardId, listId)),
   removeTask: (content, listId) => dispatch(removeTask(content, listId)),

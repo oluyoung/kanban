@@ -5,12 +5,12 @@ import {
   removeTask as removeTaskFromList
 } from './list.creator';
 
-export function addTask(content, listId) {
+export function addTask(content, listId, boardId) {
   return (dispatch, getStore) => {
     const taskId = nanoid();
     dispatch({
       type: actions.ADD_TASK,
-      task: { id: taskId, content, authorId: getStore().authors.currentAuthorId }
+      task: { id: taskId, content, authorId: getStore().authors.currentAuthorId, boardId }
     });
     dispatch(addTaskToList(listId, taskId));
   };

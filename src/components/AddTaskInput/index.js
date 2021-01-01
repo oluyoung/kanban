@@ -57,7 +57,7 @@ function AddTaskInput(props) {
 
   const addTask = () => {
     if (inputRef.current.value) {
-      props.addTask(inputRef.current.value, props.listId);
+      props.addTask(inputRef.current.value, props.listId, props.boardId);
     } else {
       inputRef.current.focus();
     }
