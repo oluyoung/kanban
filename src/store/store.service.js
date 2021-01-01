@@ -23,7 +23,9 @@ class StoreService {
     return db.collection('tasks').doc(task.id).set(task);
   }
 
-  updateTask(id) {}
+  updateTask(id, data) {
+    return db.collection('tasks').doc(id).update({...data});
+  }
   getTasks() {}
   getTask() {}
   saveBoard() {}

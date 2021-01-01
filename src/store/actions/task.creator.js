@@ -31,22 +31,29 @@ export function getTask(taskId) {
 
 export function updateContent(taskId, content) {
   return (dispatch, getStore) => {
-    console.log(content)
-    const task = getStore().tasks.tasks[taskId];
-    dispatch({
-      type: actions.UPDATE_TASK,
-      task: { ...task, content }
-    });
+    storeService.updateTask(taskId, {content})
+      .then(() => {
+        const task = getStore().tasks.tasks[taskId];
+        dispatch({
+          type: actions.UPDATE_TASK,
+          task: { ...task, content }
+        });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
 export function updateDescription(taskId, description) {
   return (dispatch, getStore) => {
-    const task = getStore().tasks.tasks[taskId];
-    dispatch({
-      type: actions.UPDATE_TASK,
-      task: { ...task, description }
-    });
+    storeService.updateTask(taskId, {description})
+      .then(() => {
+        const task = getStore().tasks.tasks[taskId];
+        dispatch({
+          type: actions.UPDATE_TASK,
+          task: { ...task, description }
+        });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
