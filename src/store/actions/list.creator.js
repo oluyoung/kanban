@@ -54,7 +54,7 @@ export function addList(boardId, title) {
     dispatch({
       type: actions.ADD_LIST,
       listId,
-      list: {id: listId, title, taskIds: [], authorId: getStore().authors.currentAuthorId}
+      list: {id: listId, title, taskIds: [], authorId: getStore().authors.currentAuthorId, boardId}
     });
     dispatch(addListToBoard(boardId, listId));
   };
