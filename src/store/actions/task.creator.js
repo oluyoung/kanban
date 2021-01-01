@@ -4,15 +4,18 @@ import {
   addTask as addTaskToList,
   removeTask as removeTaskFromList
 } from './list.creator';
+import storeService from '../store.service';
 
 export function addTask(content, listId, boardId) {
   return (dispatch, getStore) => {
     const taskId = nanoid();
-    dispatch({
-      type: actions.ADD_TASK,
-      task: { id: taskId, content, authorId: getStore().authors.currentAuthorId, boardId }
-    });
-    dispatch(addTaskToList(listId, taskId));
+    const task = { id: taskId, content, authorId: getStore().authors.currentAuthorId, boardId };
+    storeService.addTask(task)
+      .then(() => {
+        dispatch({ type: actions.ADD_TASK, task });
+        dispatch(addTaskToList(listId, taskId));
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
