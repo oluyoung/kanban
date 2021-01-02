@@ -34,7 +34,7 @@ export function removeList(boardId, listId) {
     const board = {...getStore().boards.boards[boardId]};
     const updatedListIds = board.listOrder.filter(id => (listId !== id));
     dispatch({
-      type: actions.ADD_LIST_TO_BOARD,
+      type: actions.REMOVE_LIST_FROM_BOARD,
       updatedBoard: {
         ...board,
         listIds: updatedListIds,

@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { omit, without } from 'lodash';
 import * as actions from './constants';
 import { removeListTasks } from './task.creator';
 import {
@@ -38,7 +39,7 @@ export function removeTask(listId, taskId) {
     const list = {...getStore().lists.lists[listId]};
     const updatedList = {
       ...list,
-      taskIds: list.taskIds.filter(id => (taskId !== id))
+      taskIds: without(list.taskIds, taskId)
     };
 
     dispatch({
@@ -64,14 +65,13 @@ export function removeList(boardId, listId) {
   return (dispatch, getStore) => {
     const list = {...getStore().lists.lists[listId]};
     const lists = {...getStore().lists.lists};
-    delete lists[listId];
 
-    dispatch({
-      type: actions.ADD_LIST,
-      lists: {...lists}
-    });
-    dispatch(removeListTasks(list.taskIds));
     dispatch(removeListFromBoard(boardId, listId));
+    dispatch(removeListTasks(list.taskIds));
+    dispatch({
+      type: actions.REMOVE_LIST,
+      lists: omit(lists, [listId])
+    });
   };
 }
 
@@ -82,7 +82,7 @@ export function updateListTasksOrder(source, destination, draggableId) {
     const taskIds = list.taskIds.filter((_, index) => (index !== source.index));
     taskIds.splice(destination.index, 0, draggableId);
 
-    const updatedLists = {
+    const lists = {
       ...getStore().lists.lists,
       [list.id]: {
         ...list,
@@ -92,7 +92,7 @@ export function updateListTasksOrder(source, destination, draggableId) {
 
     dispatch({
       type: actions.UPDATE_LISTS,
-      updatedLists
+      lists
     });
   };
 }
@@ -107,7 +107,7 @@ export function updateListsTasksOrder(source, destination, draggableId) {
     const endListTaskIds = Array.from(endList.taskIds);
     endListTaskIds.splice(destination.index, 0, draggableId);
 
-    const updatedLists = {
+    const lists = {
       ...getStore().lists.lists,
       [startList.id]: {
         ...startList,
@@ -121,7 +121,7 @@ export function updateListsTasksOrder(source, destination, draggableId) {
 
     dispatch({
       type: actions.UPDATE_LISTS,
-      updatedLists
+      lists
     });
   };
 }

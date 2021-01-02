@@ -15,11 +15,6 @@ export default function listReducer(state = initialState, action) {
           [action.listId]: action.list
         }
       };
-    case actions.GET_LISTS:
-      return {
-        ...state,
-        lists: {...action.lists}
-      };
     case actions.REMOVE_TASK_FROM_LIST:
     case actions.ADD_TASK_TO_LIST:
       return {
@@ -41,9 +36,11 @@ export default function listReducer(state = initialState, action) {
         listIdWithOpenTaskInput: ''
       };
     case actions.UPDATE_LISTS:
+    case actions.REMOVE_LIST:
+    case actions.GET_LISTS:
       return {
         ...state,
-        lists: action.updatedLists
+        lists: {...action.lists}
       };
     default:
       return state;

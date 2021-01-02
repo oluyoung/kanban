@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { omit } from 'lodash';
 import * as actions from './constants';
 import {
   addTask as addTaskToList,
@@ -20,12 +21,15 @@ export function addTask(content, listId, boardId) {
 }
 
 export function getTask(taskId) {
-  return (dispatch, getStore) => {
-    const task = getStore().tasks.tasks[taskId];
-    dispatch({
-      type: actions.GET_TASK,
-      task
-    });
+  return (dispatch) => {
+    storeService.getTask(taskId)
+      .then((task) => {
+        dispatch({
+          type: actions.GET_TASK,
+          task
+        });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
@@ -63,8 +67,7 @@ export function removeTask(task) {
       .then(() => {
         const tasks = {...getStore().tasks.tasks};
         dispatch(removeTaskFromList(task.listId, task.id));
-        delete tasks[task.id];
-        dispatch({ type: actions.REMOVE_TASK, tasks: {...tasks} });
+        dispatch({ type: actions.REMOVE_TASK, tasks: omit(tasks, [task.id]) });
       }).catch((error) => console.error(error));
   };
 }
@@ -72,13 +75,10 @@ export function removeTask(task) {
 export function removeListTasks(taskIds) {
   return (dispatch, getStore) => {
     const tasks = {...getStore().tasks.tasks};
-    taskIds.forEach(id => {
-      delete tasks[id];
-    });
 
     dispatch({
       type: actions.REMOVE_LIST_TASKS,
-      tasks: {...tasks}
+      tasks: omit(tasks, [taskIds])
     });
   };
 }
