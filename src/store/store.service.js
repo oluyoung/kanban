@@ -55,6 +55,10 @@ class StoreService {
     return Promise.all(ids.map(id => db.collection('tasks').doc(id).delete()));
   }
 
+  addAuthor(author) {
+    return db.collection('authors').doc(author.id).set({...author});
+  }
+
   saveBoard() {}
   getBoards() {}
   getBoard() {}

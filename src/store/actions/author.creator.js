@@ -1,15 +1,15 @@
 import { nanoid } from 'nanoid';
+import storeService from '../store.service';
 import * as actions from './constants';
 
 export function addAuthor(username) {
   return (dispatch) => {
-    dispatch({
-      type: actions.ADD_AUTHOR,
-      author: {
-        id: nanoid(),
-        username
-      }
-    });
+    const author = { id: nanoid(), username };
+    storeService.addAuthor(author)
+      .then(() => {
+        dispatch({ type: actions.ADD_AUTHOR, author });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
