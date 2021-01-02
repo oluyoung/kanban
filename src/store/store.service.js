@@ -44,11 +44,15 @@ class StoreService {
           if (doc.exists) {
             return resolve(doc.data());
           } else {
-            return reject(new Error('No message exists'));
+            return reject(new Error('No task with that id exists'));
           }
         })
         .catch((error) => reject(error));
     });
+  }
+
+  removeListTasks(ids) {
+    return Promise.all(ids.map(id => db.collection('tasks').doc(id).delete()));
   }
 
   saveBoard() {}

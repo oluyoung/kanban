@@ -68,17 +68,21 @@ export function removeTask(task) {
         const tasks = {...getStore().tasks.tasks};
         dispatch(removeTaskFromList(task.listId, task.id));
         dispatch({ type: actions.REMOVE_TASK, tasks: omit(tasks, [task.id]) });
-      }).catch((error) => console.error(error));
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
 export function removeListTasks(taskIds) {
   return (dispatch, getStore) => {
-    const tasks = {...getStore().tasks.tasks};
-
-    dispatch({
-      type: actions.REMOVE_LIST_TASKS,
-      tasks: omit(tasks, [taskIds])
-    });
+    storeService.removeListTasks(taskIds)
+      .then(() => {
+        const tasks = {...getStore().tasks.tasks};
+        dispatch({
+          type: actions.REMOVE_LIST_TASKS,
+          tasks: omit(tasks, [taskIds])
+        });
+      })
+      .catch((error) => alert(error.message));
   };
 }
