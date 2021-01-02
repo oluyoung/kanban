@@ -5,6 +5,7 @@ import { removeListTasks } from './task.creator';
 import {
   addList as addListToBoard,
   removeList as removeListFromBoard } from './board.creator';
+import storeService from '../store.service';
 
 export function openTaskInput(listId) {
   return {
@@ -21,16 +22,18 @@ export function closeTaskInput() {
 
 export function addTask(listId, taskId) {
   return (dispatch, getStore) => {
-    const list = {...getStore().lists.lists[listId]};
-    const updatedList = {
-      ...list,
-      taskIds: list.taskIds.concat(taskId)
-    };
-
-    dispatch({
-      type: actions.ADD_TASK_TO_LIST,
-      updatedList
-    });
+    storeService.addTaskToList(listId, taskId)
+      .then(() => {
+        const list = {...getStore().lists.lists[listId]};
+        dispatch({
+          type: actions.ADD_TASK_TO_LIST,
+          updatedList: {
+            ...list,
+            taskIds: list.taskIds.concat(taskId)
+          }
+        })
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
@@ -52,12 +55,13 @@ export function removeTask(listId, taskId) {
 export function addList(boardId, title) {
   return (dispatch, getStore) => {
     const listId = nanoid();
-    dispatch({
-      type: actions.ADD_LIST,
-      listId,
-      list: {id: listId, title, taskIds: [], authorId: getStore().authors.currentAuthorId, boardId}
-    });
-    dispatch(addListToBoard(boardId, listId));
+    const list = { id: listId, title, taskIds: [], authorId: getStore().authors.currentAuthorId, boardId };
+    storeService.addList(list)
+      .then(() => {
+        dispatch({ type: actions.ADD_LIST, listId, list })
+        dispatch(addListToBoard(boardId, listId));
+      })
+      .catch((error) => alert(error.message));
   };
 }
 

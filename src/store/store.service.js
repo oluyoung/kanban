@@ -73,12 +73,27 @@ class StoreService {
     return db.collection('authors').doc(author.id).set({...author});
   }
 
+  addList(list) {
+    return db.collection('lists').doc(list.id).set({...list});
+  }
+
+  addTaskToList(id, taskId) {
+    return db.collection('lists').doc(id).update({
+      taskIds: firebase.firestore.FieldValue.arrayUnion(taskId)
+    });
+  }
+
+  removeTaskFromList(id, taskId) {
+    return db.collection('lists').doc(id).update({
+      taskIds: firebase.firestore.FieldValue.arrayRemove(taskId)
+    });
+  }
+
+  getLists() {}
+  getList() {}
   saveBoard() {}
   getBoards() {}
   getBoard() {}
-  saveList() {}
-  getLists() {}
-  getList() {}
 }
 
 const storeService = new StoreService();
