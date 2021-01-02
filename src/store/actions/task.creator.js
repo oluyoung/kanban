@@ -6,6 +6,7 @@ import {
   removeTask as removeTaskFromList
 } from './list.creator';
 import storeService from '../store.service';
+import history from '../../history';
 
 export function addTask(content, listId, boardId) {
   return (dispatch, getStore) => {
@@ -20,7 +21,7 @@ export function addTask(content, listId, boardId) {
   };
 }
 
-export function getTask(taskId) {
+export function getTask(taskId, boardId) {
   return (dispatch) => {
     storeService.getTask(taskId)
       .then((task) => {
@@ -29,7 +30,12 @@ export function getTask(taskId) {
           task
         });
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        if (error.message === 'No task with that id exists') {
+          history.push(`/b/${boardId}`)
+        }
+        alert(error.message);
+      });
   };
 }
 

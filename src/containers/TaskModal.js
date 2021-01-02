@@ -77,7 +77,7 @@ class TaskModal extends React.Component {
 
   componentDidMount() {
     if (this.props.match.params.taskId) {
-      this.props.getTask(this.props.match.params.taskId);
+      this.props.getTask(this.props.match.params.taskId, this.props.match.params.boardId);
     }
   }
 
@@ -161,7 +161,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getTask: (taskId) => dispatch(getTask(taskId)),
+  getTask: (taskId, boardId) => dispatch(getTask(taskId, boardId)),
   removeTask: (task) => dispatch(removeTask(task)),
   updateContent: (taskId, content) => dispatch(updateContent(taskId, content)),
   updateDescription: (taskId, description) => dispatch(updateDescription(taskId, description))
