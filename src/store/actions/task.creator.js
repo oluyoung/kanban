@@ -4,15 +4,18 @@ import {
   addTask as addTaskToList,
   removeTask as removeTaskFromList
 } from './list.creator';
+import storeService from '../store.service';
 
 export function addTask(content, listId, boardId) {
   return (dispatch, getStore) => {
     const taskId = nanoid();
-    dispatch({
-      type: actions.ADD_TASK,
-      task: { id: taskId, content, authorId: getStore().authors.currentAuthorId, boardId }
-    });
-    dispatch(addTaskToList(listId, taskId));
+    const task = { id: taskId, content, authorId: getStore().authors.currentAuthorId, listId, boardId };
+    storeService.addTask(task)
+      .then(() => {
+        dispatch({ type: actions.ADD_TASK, task });
+        dispatch(addTaskToList(listId, taskId));
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
@@ -28,42 +31,47 @@ export function getTask(taskId) {
 
 export function updateContent(taskId, content) {
   return (dispatch, getStore) => {
-    console.log(content)
-    const task = getStore().tasks.tasks[taskId];
-    dispatch({
-      type: actions.UPDATE_TASK,
-      task: { ...task, content }
-    });
+    storeService.updateTask(taskId, {content})
+      .then(() => {
+        const task = getStore().tasks.tasks[taskId];
+        dispatch({
+          type: actions.UPDATE_TASK,
+          task: { ...task, content }
+        });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
 export function updateDescription(taskId, description) {
   return (dispatch, getStore) => {
-    const task = getStore().tasks.tasks[taskId];
-    dispatch({
-      type: actions.UPDATE_TASK,
-      task: { ...task, description }
-    });
+    storeService.updateTask(taskId, {description})
+      .then(() => {
+        const task = getStore().tasks.tasks[taskId];
+        dispatch({
+          type: actions.UPDATE_TASK,
+          task: { ...task, description }
+        });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
-export function removeTask(listId, taskId) {
+export function removeTask(task) {
   return (dispatch, getStore) => {
-    const tasks = {...getStore().tasks.tasks};
-    delete tasks[taskId];
-
-    dispatch({
-      type: actions.REMOVE_TASK,
-      tasks: {...tasks}
-    });
-    dispatch(removeTaskFromList(listId, taskId));
+    storeService.removeTask(task.id)
+      .then(() => {
+        const tasks = {...getStore().tasks.tasks};
+        dispatch(removeTaskFromList(task.listId, task.id));
+        delete tasks[task.id];
+        dispatch({ type: actions.REMOVE_TASK, tasks: {...tasks} });
+      }).catch((error) => console.error(error));
   };
 }
 
 export function removeListTasks(taskIds) {
   return (dispatch, getStore) => {
     const tasks = {...getStore().tasks.tasks};
-    console.log(taskIds)
     taskIds.forEach(id => {
       delete tasks[id];
     });

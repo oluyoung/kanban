@@ -16,7 +16,6 @@ const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
   flex-shrink: 0;
-  flex-grow: 1;
 `;
 const Header = styled.div`
   display: flex;

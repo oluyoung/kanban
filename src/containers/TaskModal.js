@@ -103,8 +103,7 @@ class TaskModal extends React.Component {
   removeTask = () => {
     const result = window.confirm('Are you sure you want to remove this task?');
     if (result) {
-      this.props.removeTask(this.props.match.params.listId, this.props.task.id);
-      this.props.history.push(`/b/${this.props.match.params.boardId}`);
+      this.props.removeTask(this.props.task);
       this.closeModal();
     }
   }
@@ -163,7 +162,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getTask: (taskId) => dispatch(getTask(taskId)),
-  removeTask: (listId, taskId) => dispatch(removeTask(listId, taskId)),
+  removeTask: (task) => dispatch(removeTask(task)),
   updateContent: (taskId, content) => dispatch(updateContent(taskId, content)),
   updateDescription: (taskId, description) => dispatch(updateDescription(taskId, description))
 });
