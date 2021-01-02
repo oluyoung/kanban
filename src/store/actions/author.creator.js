@@ -13,6 +13,14 @@ export function addAuthor(username) {
   };
 }
 
+export function getAuthors() {
+  return (dispatch) => {
+    storeService.getAuthors()
+      .then((authors) => dispatch({ type: actions.GET_AUTHORS, authors }))
+      .catch((error) => alert(error.message));
+  };
+}
+
 export function setCurrentAuthor(authorId) {
   return (dispatch, getStore) => {
     const author = getStore().authors.authors[authorId];

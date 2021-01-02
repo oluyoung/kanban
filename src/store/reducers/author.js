@@ -23,9 +23,7 @@ export default function authorReducer(state = initialState, action) {
         }
       };
     case actions.GET_AUTHORS:
-      return {
-        ...action.authors
-      };
+      return { authors: {...action.authors} };
     case actions.LOGOUT:
       return {
         ...state,

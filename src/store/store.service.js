@@ -55,6 +55,20 @@ class StoreService {
     return Promise.all(ids.map(id => db.collection('tasks').doc(id).delete()));
   }
 
+  getAuthors() {
+    return new Promise((resolve, reject) => {
+      return db.collection('authors').get()
+        .then((querySnapshots) => {
+          const authors = {};
+          querySnapshots.forEach((doc) => {
+            authors[doc.id] = doc.data();
+          });
+          return resolve(authors);
+        })
+        .catch((error) => reject(error));
+      });
+  }
+
   addAuthor(author) {
     return db.collection('authors').doc(author.id).set({...author});
   }
