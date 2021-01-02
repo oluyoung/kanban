@@ -9,7 +9,7 @@ import storeService from '../store.service';
 export function addTask(content, listId, boardId) {
   return (dispatch, getStore) => {
     const taskId = nanoid();
-    const task = { id: taskId, content, authorId: getStore().authors.currentAuthorId, boardId };
+    const task = { id: taskId, content, authorId: getStore().authors.currentAuthorId, listId, boardId };
     storeService.addTask(task)
       .then(() => {
         dispatch({ type: actions.ADD_TASK, task });
@@ -57,23 +57,21 @@ export function updateDescription(taskId, description) {
   };
 }
 
-export function removeTask(listId, taskId) {
+export function removeTask(task) {
   return (dispatch, getStore) => {
-    const tasks = {...getStore().tasks.tasks};
-    delete tasks[taskId];
-
-    dispatch({
-      type: actions.REMOVE_TASK,
-      tasks: {...tasks}
-    });
-    dispatch(removeTaskFromList(listId, taskId));
+    storeService.removeTask(task.id)
+      .then(() => {
+        const tasks = {...getStore().tasks.tasks};
+        dispatch(removeTaskFromList(task.listId, task.id));
+        delete tasks[task.id];
+        dispatch({ type: actions.REMOVE_TASK, tasks: {...tasks} });
+      }).catch((error) => console.error(error));
   };
 }
 
 export function removeListTasks(taskIds) {
   return (dispatch, getStore) => {
     const tasks = {...getStore().tasks.tasks};
-    console.log(taskIds)
     taskIds.forEach(id => {
       delete tasks[id];
     });

@@ -30,11 +30,7 @@ export default function taskReducer(state = initialState, action) {
         ...state,
         tasks: {
           ...state.tasks,
-          [action.task.id]: {
-            id: action.task.id,
-            content: action.task.content,
-            authorId: action.task.authorId
-          }
+          [action.task.id]: {...action.task}
         }
       };
     case actions.REMOVE_LIST_TASKS:
@@ -42,7 +38,9 @@ export default function taskReducer(state = initialState, action) {
     case actions.GET_TASKS:
       return {
         ...state,
-        tasks: {...action.tasks}
+        tasks: {...action.tasks},
+        currentTaskId: undefined,
+        currentTask: undefined
       };
     default:
       return state;

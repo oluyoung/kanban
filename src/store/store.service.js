@@ -20,12 +20,17 @@ class StoreService {
   saveTasks() {}
 
   addTask = (task) => {
-    return db.collection('tasks').doc(task.id).set(task);
+    return db.collection('tasks').doc(task.id).set({...task});
   }
 
   updateTask(id, data) {
     return db.collection('tasks').doc(id).update({...data});
   }
+
+  removeTask(id) {
+    return db.collection('tasks').doc(id).delete();
+  }
+
   getTasks() {}
   getTask() {}
   saveBoard() {}
