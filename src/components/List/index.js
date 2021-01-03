@@ -56,7 +56,6 @@ const DeleteBtn = styled.a`
 // can probably use PureComponent, and should extract into different components
 class InnerList extends React.Component {
   shouldComponentUpdate(nextProps) {
-    console.log(nextProps.tasks === this.props.tasks)
     if (nextProps.tasks === this.props.tasks) {
       return false;
     }

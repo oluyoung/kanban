@@ -21,14 +21,21 @@ export function addTask(content, listId, boardId) {
   };
 }
 
+export function getTasksForBoard() {
+  return (dispatch, getStore) => {
+    storeService.getTasksForBoard(getStore().boards.currentBoardId)
+      .then((tasks) => {
+        dispatch({ type: actions.GET_TASKS, tasks });
+      })
+      .catch((error) => alert(error.message));
+  };
+}
+
 export function getTask(taskId, boardId) {
   return (dispatch) => {
     storeService.getTask(taskId)
       .then((task) => {
-        dispatch({
-          type: actions.GET_TASK,
-          task
-        });
+        dispatch({ type: actions.GET_TASK, task });
       })
       .catch((error) => {
         if (error.message === 'No task with that id exists') {
@@ -44,10 +51,7 @@ export function updateContent(taskId, content) {
     storeService.updateTask(taskId, {content})
       .then(() => {
         const task = getStore().tasks.tasks[taskId];
-        dispatch({
-          type: actions.UPDATE_TASK,
-          task: { ...task, content }
-        });
+        dispatch({ type: actions.UPDATE_TASK, task: { ...task, content } });
       })
       .catch((error) => alert(error.message));
   };
@@ -58,10 +62,7 @@ export function updateDescription(taskId, description) {
     storeService.updateTask(taskId, {description})
       .then(() => {
         const task = getStore().tasks.tasks[taskId];
-        dispatch({
-          type: actions.UPDATE_TASK,
-          task: { ...task, description }
-        });
+        dispatch({ type: actions.UPDATE_TASK, task: { ...task, description } });
       })
       .catch((error) => alert(error.message));
   };
@@ -84,10 +85,7 @@ export function removeListTasks(taskIds) {
     storeService.removeListTasks(taskIds)
       .then(() => {
         const tasks = {...getStore().tasks.tasks};
-        dispatch({
-          type: actions.REMOVE_LIST_TASKS,
-          tasks: omit(tasks, [taskIds])
-        });
+        dispatch({ type: actions.REMOVE_LIST_TASKS, tasks: omit(tasks, [taskIds]) });
       })
       .catch((error) => alert(error.message));
   };

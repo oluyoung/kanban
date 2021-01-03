@@ -1,46 +1,72 @@
 import { nanoid } from 'nanoid';
 import * as actions from './constants';
+import storeService from '../store.service';
+import { getTasksForBoard } from './task.creator';
+import { getListsForBoard } from './list.creator';
+
+export function getBoards() {
+  return (dispatch, getStore) => {
+    storeService.getBoardsForAuthor(getStore().authors.currentAuthorId)
+      .then((boards) => {
+        dispatch({ type: actions.GET_BOARDS, boards });
+      })
+      .catch((error) => alert(error.message));
+  };
+}
 
 export function addBoard(title) {
   return (dispatch, getStore) => {
-    dispatch({
-      type: actions.ADD_BOARD,
-      authorId: getStore().authors.currentAuthorId,
-      board: {
-        id: nanoid(),
-        title
-      }
-    });
+    const board = {
+      id: nanoid(),
+      title,
+      listIds: [],
+      listOrder: [],
+      authorId: getStore().authors.currentAuthorId
+    };
+
+    storeService.addBoard(board)
+      .then(() => {
+        dispatch({ type: actions.ADD_BOARD, board });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
 export function addList(boardId, listId) {
   return (dispatch, getStore) => {
-    const board = {...getStore().boards.boards[boardId]};
-    const updatedListIds = board.listIds.concat(listId);
-    dispatch({
-      type: actions.ADD_LIST_TO_BOARD,
-      updatedBoard: {
-        ...board,
-        listIds: updatedListIds,
-        listOrder: updatedListIds
-      }
-    });
+    storeService.addListToBoard(boardId, listId)
+      .then(() => {
+        const board = {...getStore().boards.boards[boardId]};
+        const updatedListIds = board.listIds.concat(listId);
+        dispatch({
+          type: actions.ADD_LIST_TO_BOARD,
+          updatedBoard: {
+            ...board,
+            listIds: updatedListIds,
+            listOrder: updatedListIds
+          }
+        });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
 export function removeList(boardId, listId) {
   return (dispatch, getStore) => {
-    const board = {...getStore().boards.boards[boardId]};
-    const updatedListIds = board.listOrder.filter(id => (listId !== id));
-    dispatch({
-      type: actions.REMOVE_LIST_FROM_BOARD,
-      updatedBoard: {
-        ...board,
-        listIds: updatedListIds,
-        listOrder: updatedListIds
-      }
-    });
+    storeService.removeListFromBoard(boardId, listId)
+      .then(() => {
+        const board = {...getStore().boards.boards[boardId]};
+        const updatedListIds = board.listOrder.filter(id => (listId !== id));
+        dispatch({
+          type: actions.REMOVE_LIST_FROM_BOARD,
+          updatedBoard: {
+            ...board,
+            listIds: updatedListIds,
+            listOrder: updatedListIds
+          }
+        });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
@@ -54,7 +80,9 @@ export function getBoard(boardId, authorId) {
       return;
     }
     dispatch(addCurrentBoard(boardId));
-  }
+    dispatch(getTasksForBoard());
+    dispatch(getListsForBoard());
+  };
 }
 
 export function addCurrentBoard(id) {

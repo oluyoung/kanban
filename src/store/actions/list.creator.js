@@ -20,6 +20,16 @@ export function closeTaskInput() {
   };
 }
 
+export function getListsForBoard() {
+  return (dispatch, getStore) => {
+    storeService.getListsForBoard(getStore().boards.currentBoardId)
+      .then((lists) => {
+        dispatch({ type: actions.GET_LISTS, lists });
+      })
+      .catch((error) => alert(error.message));;
+  };
+}
+
 export function addTask(listId, taskId) {
   return (dispatch, getStore) => {
     storeService.addTaskToList(listId, taskId)
@@ -31,7 +41,7 @@ export function addTask(listId, taskId) {
             ...list,
             taskIds: list.taskIds.concat(taskId)
           }
-        })
+        });
       })
       .catch((error) => alert(error.message));
   };
@@ -39,17 +49,19 @@ export function addTask(listId, taskId) {
 
 export function removeTask(listId, taskId) {
   return (dispatch, getStore) => {
-    const list = {...getStore().lists.lists[listId]};
-    const updatedList = {
-      ...list,
-      taskIds: without(list.taskIds, taskId)
-    };
-
-    dispatch({
-      type: actions.REMOVE_TASK_FROM_LIST,
-      updatedList
-    });
-  }
+    storeService.removeTaskFromList(listId, taskId)
+      .then(() => {
+        const list = {...getStore().lists.lists[listId]};
+        dispatch({
+          type: actions.REMOVE_TASK_FROM_LIST,
+          updatedList: {
+            ...list,
+            taskIds: without(list.taskIds, taskId)
+          }
+        });
+      })
+      .catch((error) => alert(error.message));
+  };
 }
 
 export function addList(boardId, title) {
@@ -67,15 +79,15 @@ export function addList(boardId, title) {
 
 export function removeList(boardId, listId) {
   return (dispatch, getStore) => {
-    const list = {...getStore().lists.lists[listId]};
-    const lists = {...getStore().lists.lists};
-
-    dispatch(removeListFromBoard(boardId, listId));
-    dispatch(removeListTasks(list.taskIds));
-    dispatch({
-      type: actions.REMOVE_LIST,
-      lists: omit(lists, [listId])
-    });
+    storeService.removeList(listId)
+      .then(() => {
+        const list = {...getStore().lists.lists[listId]};
+        const lists = {...getStore().lists.lists};
+        dispatch(removeListFromBoard(boardId, listId));
+        dispatch(removeListTasks(list.taskIds));
+        dispatch({ type: actions.REMOVE_LIST, lists: omit(lists, [listId]) });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 

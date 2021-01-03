@@ -118,7 +118,7 @@ class Board extends Component {
                 ref={provided.innerRef}>
                 <InnerContainer>
                   {this.props.currentBoard.listOrder.map((listId, index) => {
-                    const list = this.props.lists.find(list => (listId === list.id));
+                    const list = this.props.lists[listId];
                     return <InnerList
                       key={list.id}
                       list={list}
@@ -155,7 +155,7 @@ const mapStateToProps = state => ({
   authorId: state.authors.currentAuthorId,
   currentBoard: state.boards.currentBoard,
   boards: state.boards.boards,
-  lists: getBoardLists(state),
+  lists: state.lists.lists,
   tasks: state.tasks.tasks,
   listIdWithOpenTaskInput: state.lists.listIdWithOpenTaskInput
 });

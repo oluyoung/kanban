@@ -17,12 +17,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 class StoreService {
-  getTasks(boardId) {
-    return new Promise((resolve, reject) => {
-      db.collection('tasks').where('boardId', '==', boardId).get()
-        .then(() => {})
-        .catch((error) => reject(error));
-    })
+  getTasksForBoard(boardId) {
+    return this._getResourcesForModel('tasks', 'boardId', boardId);
   }
 
   addTask(task) {
@@ -77,6 +73,10 @@ class StoreService {
     return db.collection('lists').doc(list.id).set({...list});
   }
 
+  removeList(id) {
+    return db.collection('lists').doc(id).delete();
+  }
+
   addTaskToList(id, taskId) {
     return db.collection('lists').doc(id).update({
       taskIds: firebase.firestore.FieldValue.arrayUnion(taskId)
@@ -89,11 +89,59 @@ class StoreService {
     });
   }
 
-  getLists() {}
-  getList() {}
-  saveBoard() {}
-  getBoards() {}
-  getBoard() {}
+  getListsForBoard(boardId) {
+    return this._getResourcesForModel('lists', 'boardId', boardId);
+  }
+
+  addBoard(board) {
+    return db.collection('boards').doc(board.id).set({...board});
+  }
+
+  getBoardsForAuthor(authorId) {
+    return this._getResourcesForModel('boards', 'authorId', authorId);
+  }
+
+  getBoard(id) {
+    return new Promise((resolve, reject) => {
+      db.collection('boards').doc(id).get()
+        .then((doc) => {
+          if (doc.exists) {
+            return resolve(doc.data());
+          } else {
+            return reject(new Error('No board with that id exists'));
+          }
+        })
+        .catch((error) => reject(error));
+    });
+  }
+
+  addListToBoard(id, listId) {
+    return db.collection('boards').doc(id).update({
+      listIds: firebase.firestore.FieldValue.arrayUnion(listId),
+      listOrder: firebase.firestore.FieldValue.arrayUnion(listId)
+    });
+  }
+
+  removeListFromBoard(id, listId) {
+    return db.collection('boards').doc(id).update({
+      listIds: firebase.firestore.FieldValue.arrayRemove(listId),
+      listOrder: firebase.firestore.FieldValue.arrayRemove(listId)
+    });
+  }
+
+  _getResourcesForModel(collection, modelIdPropertyName, modelId) {
+    return new Promise((resolve, reject) => {
+      db.collection(collection).where(modelIdPropertyName, '==', modelId).get()
+        .then((querySnapshots) => {
+          const resources = {};
+          querySnapshots.forEach((doc) => {
+            resources[doc.id] = doc.data();
+          });
+          return resolve(resources);
+        })
+        .catch((error) => reject(error));
+    });
+  }
 }
 
 const storeService = new StoreService();

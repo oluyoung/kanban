@@ -13,20 +13,14 @@ export default function boardReducer(state = initialState, action) {
     case actions.GET_BOARDS:
       return {
         ...state,
-        boards: action.boards
+        boards: {...action.boards}
       };
     case actions.ADD_BOARD:
       return {
         ...state,
         boards: {
           ...state.boards,
-          [action.board.id]: {
-            id: action.board.id,
-            title: action.board.title,
-            listIds: [],
-            listOrder: [],
-            authorId: action.authorId
-          }
+          [action.board.id]: { ...action.board }
         }
       };
     case actions.GET_CURRENT_BOARD:

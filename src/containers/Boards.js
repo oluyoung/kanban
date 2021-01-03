@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Logout from '../components/Logout';
 import { getAuthorBoards } from '../store/selectors';
 import { logout } from '../store/actions/author.creator';
-import { addBoard } from '../store/actions/board.creator';
+import { getBoards, addBoard } from '../store/actions/board.creator';
 
 function generateRandomColor() {
   let randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
@@ -61,6 +60,7 @@ const BoardItem = styled.a`
   min-height: 85px;
   margin-bottom: 1.5em;
   border-radius: 3px;
+  cursor: pointer;
 `;
 const BoardItemText = styled.span`
   position: absolute;
@@ -116,7 +116,9 @@ class Boards extends Component {
   componentDidMount() {
     if (!this.props.author) {
       this.props.history.push(`/`);
+      return;
     }
+    this.props.getBoards();
   }
 
   logout = () => {
@@ -133,15 +135,20 @@ class Boards extends Component {
     }
   };
 
+  selectBoard = (boardId) => {
+    this.props.history.push(`/b/${boardId}`);
+  }
+
   render() {
     const boardsListView = this.props.boards.map(board => {
-      return <Link key={board.id} to={`/b/${board.id}`} component={(props) => {
-        return (
-          <BoardItem {...props} style={{backgroundColor: generateRandomColor()}}>
-            <BoardItemText>{board.title}</BoardItemText>
-          </BoardItem>
-        );
-      }} />;
+      return (
+        <BoardItem
+          key={board.id}
+          onClick={() => this.selectBoard(board.id)}
+          style={{backgroundColor: generateRandomColor()}}>
+          <BoardItemText>{board.title}</BoardItemText>
+        </BoardItem>
+      );
     });
 
     return (
@@ -178,6 +185,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  getBoards: () => dispatch(getBoards()),
   addBoard: (title) => dispatch(addBoard(title)),
   logout: () => dispatch(logout())
 });
