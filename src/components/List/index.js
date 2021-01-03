@@ -94,8 +94,8 @@ export default class List extends React.Component {
             ref={provided.innerRef}
             {...provided.draggableProps}
             onKeyDown={this.onKeyDownHandle}>
-            <Header>
-              <Title {...provided.dragHandleProps}>{this.props.column.title}</Title>
+            <Header {...provided.dragHandleProps}>
+              <Title>{this.props.column.title}</Title>
               <DeleteBtn onClick={this.removeList}><FontAwesomeIcon icon={faTrash} /></DeleteBtn>
             </Header>
             <Droppable droppableId={this.props.column.id} type="task">
