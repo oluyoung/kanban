@@ -64,10 +64,13 @@ class InnerList extends React.Component {
 
   render() {
     return this.props.tasks.map((task, idx) => {
-      return <Task key={task.id} task={task} index={idx}
-        listId={this.props.listId}
-        removeTask={this.props.removeTask}
-        boardId={this.props.boardId} />
+      if (task) {
+        return <Task key={task.id} task={task} index={idx}
+          listId={this.props.listId}
+          removeTask={this.props.removeTask}
+          boardId={this.props.boardId} />
+      }
+      return null;
     });
   }
 }

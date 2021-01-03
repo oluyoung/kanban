@@ -8,7 +8,7 @@ import { getAuthorsList, getAuthorUsernames } from '../store/selectors';
 
 const Container = styled.div`
   margin: auto;
-  margin-top: 5vh;
+  padding-top: 5vh;
   max-width: 540px;
 `;
 const Header = styled.div`

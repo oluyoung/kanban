@@ -34,10 +34,10 @@ export function addBoard(title) {
 
 export function addList(boardId, listId) {
   return (dispatch, getStore) => {
-    storeService.addListToBoard(boardId, listId)
+    const board = {...getStore().boards.boards[boardId]};
+    const updatedListIds = board.listOrder.concat(listId);
+    storeService.addListToBoard(boardId, updatedListIds)
       .then(() => {
-        const board = {...getStore().boards.boards[boardId]};
-        const updatedListIds = board.listIds.concat(listId);
         dispatch({
           type: actions.ADD_LIST_TO_BOARD,
           updatedBoard: {
@@ -53,10 +53,10 @@ export function addList(boardId, listId) {
 
 export function removeList(boardId, listId) {
   return (dispatch, getStore) => {
-    storeService.removeListFromBoard(boardId, listId)
+    const board = {...getStore().boards.boards[boardId]};
+    const updatedListIds = board.listOrder.filter(id => (listId !== id));
+    storeService.removeListFromBoard(boardId, updatedListIds)
       .then(() => {
-        const board = {...getStore().boards.boards[boardId]};
-        const updatedListIds = board.listOrder.filter(id => (listId !== id));
         dispatch({
           type: actions.REMOVE_LIST_FROM_BOARD,
           updatedBoard: {
@@ -80,8 +80,8 @@ export function getBoard(boardId, authorId) {
       return;
     }
     dispatch(addCurrentBoard(boardId));
-    dispatch(getTasksForBoard());
     dispatch(getListsForBoard());
+    dispatch(getTasksForBoard());
   };
 }
 
@@ -103,9 +103,13 @@ export function updateBoardListOrder(source, destination, draggableId) {
     const updatedListOrder = getStore().boards.currentBoard.listOrder.filter((_, index) => (index !== source.index));
     updatedListOrder.splice(destination.index, 0, draggableId);
 
-    dispatch({
-      type: actions.UPDATE_BOARD_LIST_ORDER,
-      updatedListOrder
-    });
+    storeService.updateListOrder(getStore().boards.currentBoardId, updatedListOrder)
+      .then(() => {
+        dispatch({
+          type: actions.UPDATE_BOARD_LIST_ORDER,
+          updatedListOrder
+        });
+      })
+      .catch((error) => alert(error.message));
   }
 }

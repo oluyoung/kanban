@@ -7,7 +7,6 @@ import Header from '../components/Header';
 import List from '../components/List';
 import AddList from '../components/AddList';
 import TaskModal from './TaskModal';
-import { getBoardLists } from '../store/selectors';
 import { logout } from '../store/actions/author.creator';
 import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
 import {
@@ -38,7 +37,13 @@ const InnerContainer = styled.div`
 class InnerList extends React.PureComponent {
   render() {
     const { list, taskMap, index } = this.props;
-    const tasks = list.taskIds.map(taskId => taskMap[taskId]);
+    const tasks = list.taskIds.map(taskId => {
+      const task = taskMap[taskId];
+      if (task) {
+        return task;
+      }
+      return null;
+    });
 
     return <List
       column={list} tasks={tasks} index={index}
@@ -119,18 +124,21 @@ class Board extends Component {
                 <InnerContainer>
                   {this.props.currentBoard.listOrder.map((listId, index) => {
                     const list = this.props.lists[listId];
-                    return <InnerList
-                      key={list.id}
-                      list={list}
-                      taskMap={this.props.tasks}
-                      index={index}
-                      boardId={this.props.currentBoard.id}
-                      openTaskInput={this.props.openTaskInput}
-                      closeTaskInput={this.props.closeTaskInput}
-                      listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
-                      addTask={this.props.addTask}
-                      removeTask={this.props.removeTask}
-                      removeList={this.props.removeList} />
+                    if (list) {
+                      return <InnerList
+                        key={list.id}
+                        list={list}
+                        taskMap={this.props.tasks}
+                        index={index}
+                        boardId={this.props.currentBoard.id}
+                        openTaskInput={this.props.openTaskInput}
+                        closeTaskInput={this.props.closeTaskInput}
+                        listIdWithOpenTaskInput={this.props.listIdWithOpenTaskInput}
+                        addTask={this.props.addTask}
+                        removeTask={this.props.removeTask}
+                        removeList={this.props.removeList} />
+                    }
+                    return null;
                   })}
     
                   {provided.placeholder}

@@ -98,46 +98,44 @@ export function updateListTasksOrder(source, destination, draggableId) {
     const taskIds = list.taskIds.filter((_, index) => (index !== source.index));
     taskIds.splice(destination.index, 0, draggableId);
 
-    const lists = {
-      ...getStore().lists.lists,
-      [list.id]: {
-        ...list,
-        taskIds: [...taskIds]
-      }
-    };
-
-    dispatch({
-      type: actions.UPDATE_LISTS,
-      lists
-    });
+    storeService.updateListTasksOrder(list.id, taskIds)
+      .then(() => {
+        const lists = {
+          ...getStore().lists.lists,
+          [list.id]: { ...list, taskIds: [...taskIds] }
+        };
+        dispatch({ type: actions.UPDATE_LISTS, lists });
+      })
+      .catch((error) => alert(error.message));
   };
 }
 
 export function updateListsTasksOrder(source, destination, draggableId) {
   return (dispatch, getStore) => {
-    const startList = getStore().lists.lists[source.droppableId];
-    const endList = getStore().lists.lists[destination.droppableId];
+    const sourceList = getStore().lists.lists[source.droppableId];
+    const destinationList = getStore().lists.lists[destination.droppableId];
 
-    const startListTaskIds = startList.taskIds.filter((_, index) => (index !== source.index));
+    const sourceListTaskIds = sourceList.taskIds.filter((_, index) => (index !== source.index));
 
-    const endListTaskIds = Array.from(endList.taskIds);
-    endListTaskIds.splice(destination.index, 0, draggableId);
+    const destinationListTaskIds = Array.from(destinationList.taskIds);
+    destinationListTaskIds.splice(destination.index, 0, draggableId);
 
-    const lists = {
-      ...getStore().lists.lists,
-      [startList.id]: {
-        ...startList,
-        taskIds: [...startListTaskIds]
-      },
-      [endList.id]: {
-        ...endList,
-        taskIds: [...endListTaskIds]
-      }
-    };
+    storeService.updateListsTasksOrder(sourceList.id, sourceListTaskIds, destinationList.id, destinationListTaskIds)
+      .then(() => {
+        const lists = {
+          ...getStore().lists.lists,
+          [sourceList.id]: {
+            ...sourceList,
+            taskIds: [...sourceListTaskIds]
+          },
+          [destinationList.id]: {
+            ...destinationList,
+            taskIds: [...destinationListTaskIds]
+          }
+        };
 
-    dispatch({
-      type: actions.UPDATE_LISTS,
-      lists
-    });
+        dispatch({ type: actions.UPDATE_LISTS, lists });
+      })
+      .catch((error) => alert(error.message));
   };
 }

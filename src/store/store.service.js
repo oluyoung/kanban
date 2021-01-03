@@ -89,6 +89,17 @@ class StoreService {
     });
   }
 
+  updateListTasksOrder(id, taskIds) {
+    return db.collection('lists').doc(id).update({ taskIds });
+  }
+
+  updateListsTasksOrder(sourceId, sourceTaskids, destinationId, destinationTaskIds) {
+    return Promise.all([
+      this.updateListTasksOrder(sourceId, sourceTaskids),
+      this.updateListTasksOrder(destinationId, destinationTaskIds)
+    ]);
+  }
+
   getListsForBoard(boardId) {
     return this._getResourcesForModel('lists', 'boardId', boardId);
   }
@@ -115,18 +126,22 @@ class StoreService {
     });
   }
 
-  addListToBoard(id, listId) {
+  addListToBoard(id, listIds) {
     return db.collection('boards').doc(id).update({
-      listIds: firebase.firestore.FieldValue.arrayUnion(listId),
-      listOrder: firebase.firestore.FieldValue.arrayUnion(listId)
+      listIds,
+      listOrder: listIds
     });
   }
 
-  removeListFromBoard(id, listId) {
+  removeListFromBoard(id, listIds) {
     return db.collection('boards').doc(id).update({
-      listIds: firebase.firestore.FieldValue.arrayRemove(listId),
-      listOrder: firebase.firestore.FieldValue.arrayRemove(listId)
+      listIds,
+      listOrder: listIds
     });
+  }
+
+  updateListOrder(id, listOrder) {
+    return db.collection('boards').doc(id).update({ listOrder });
   }
 
   _getResourcesForModel(collection, modelIdPropertyName, modelId) {

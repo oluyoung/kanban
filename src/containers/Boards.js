@@ -16,7 +16,7 @@ function generateRandomColor() {
 
 const Container = styled.div`
   margin: auto;
-  margin-top: 5vh;
+  padding-top: 5vh;
   max-width: 720px;
 `;
 const Header = styled.div`
