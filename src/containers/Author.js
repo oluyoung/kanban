@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { addAuthor, getAuthors, setCurrentAuthor } from '../store/actions/author.creator';
+import { addAuthor, getAuthors, setCurrentAuthor, logout } from '../store/actions/author.creator';
 import { getAuthorsList, getAuthorUsernames } from '../store/selectors';
 
 const Container = styled.div`
@@ -100,6 +100,7 @@ class User extends React.Component {
   }
 
   componentDidMount() {
+    this.props.logout();
     this.props.getAuthors();
   }
 
@@ -167,7 +168,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addAuthor: (username) => dispatch(addAuthor(username)),
   getAuthors: () => dispatch(getAuthors()),
-  setCurrentAuthor: (id) => dispatch(setCurrentAuthor(id))
+  setCurrentAuthor: (id) => dispatch(setCurrentAuthor(id)),
+  logout: () => dispatch(logout())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);
