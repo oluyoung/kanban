@@ -18,6 +18,7 @@ const Container = styled.div`
   margin: auto;
   padding-top: 5vh;
   max-width: 720px;
+  width: 90%;
 `;
 const Header = styled.div`
   display: flex;
@@ -61,6 +62,12 @@ const BoardItem = styled.a`
   margin-bottom: 1.5em;
   border-radius: 3px;
   cursor: pointer;
+
+  @media (max-width: 640px) {
+    width: calc(50% - 1em);
+    margin-right: 1em;
+    margin-bottom: 1em;
+  }
 `;
 const BoardItemText = styled.span`
   position: absolute;

@@ -58,6 +58,7 @@ const Description = styled.pre`
   padding: 10px;
   border-radius: 5px;
   font-family: arial;
+  white-space: pre-wrap;
 `;
 const DeleteBtn = styled.a`
   color: red;

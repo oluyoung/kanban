@@ -21,6 +21,18 @@ const Container = styled.p`
   &:focus {
     background-color: #e0e0e0;
   }
+
+  @media (max-width: 1024px) {
+    width: 94%;
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
+
+  @media (max-width: 480px) {
+    width: 93%;
+  }
 `;
 const EditPencil = styled.span``;
 

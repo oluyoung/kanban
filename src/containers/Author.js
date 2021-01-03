@@ -10,6 +10,7 @@ const Container = styled.div`
   margin: auto;
   padding-top: 5vh;
   max-width: 540px;
+  width: 90%;
 `;
 const Header = styled.div`
   display: flex;
@@ -49,6 +50,13 @@ const AuthorItem = styled.a`
   width: calc(25% - 1.5em);
   margin-right: 1.5em;
   margin-bottom: 1.5em;
+  text-align: center;
+
+  @media (max-width: 640px) {
+    width: calc(33.3333% - 1em);
+    margin-right: 1em;
+    margin-bottom: 1em;
+  }
 `;
 const NewAuthorContainer = styled.div`
   display: flex;
@@ -130,7 +138,7 @@ class User extends React.Component {
     const authorsListView = this.props.authors.map(author => {
       return (
       <AuthorItem key={author.id} onClick={() => this.setAuthor(author.id)}>
-        <FontAwesomeIcon icon={faUserCircle} size="7x" />
+        <FontAwesomeIcon icon={faUserCircle} size="5x" />
         <AuthorName>{author.username}</AuthorName>
       </AuthorItem>);
     });

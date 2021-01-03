@@ -28,6 +28,7 @@ const InnerContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   overflow-x: auto;
+  padding-bottom: 100px;
 
   &::-webkit-scrollbar {
     display: none;

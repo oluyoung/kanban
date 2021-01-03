@@ -16,6 +16,18 @@ const Container = styled.div`
   display: flex;
   flex-flow: column nowrap;
   flex-shrink: 0;
+
+  @media (max-width: 1024px) {
+    width: calc(33.33333% - 8px);
+  }
+
+  @media (max-width: 768px) {
+    width: calc(50% - 8px);
+  }
+
+  @media (max-width: 480px) {
+    width: calc(66.66666% - 8px);
+  }
 `;
 const Header = styled.div`
   display: flex;
