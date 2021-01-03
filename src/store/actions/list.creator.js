@@ -79,11 +79,11 @@ export function addList(boardId, title) {
 
 export function removeList(boardId, listId) {
   return (dispatch, getStore) => {
+    dispatch(removeListFromBoard(boardId, listId));
     storeService.removeList(listId)
       .then(() => {
         const list = {...getStore().lists.lists[listId]};
         const lists = {...getStore().lists.lists};
-        dispatch(removeListFromBoard(boardId, listId));
         dispatch(removeListTasks(list.taskIds));
         dispatch({ type: actions.REMOVE_LIST, lists: omit(lists, [listId]) });
       })

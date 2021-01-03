@@ -70,10 +70,10 @@ export function updateDescription(taskId, description) {
 
 export function removeTask(task) {
   return (dispatch, getStore) => {
+    dispatch(removeTaskFromList(task.listId, task.id));
     storeService.removeTask(task.id)
       .then(() => {
         const tasks = {...getStore().tasks.tasks};
-        dispatch(removeTaskFromList(task.listId, task.id));
         dispatch({ type: actions.REMOVE_TASK, tasks: omit(tasks, [task.id]) });
       })
       .catch((error) => alert(error.message));
