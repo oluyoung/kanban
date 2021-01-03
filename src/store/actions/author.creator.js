@@ -36,6 +36,5 @@ export function setCurrentAuthor(authorId) {
 export function logout() {
   return (dispatch) => {
     dispatch({type: actions.LOGOUT});
-    dispatch({type: actions.REMOVE_CURRENT_BOARD});
   };
 }
