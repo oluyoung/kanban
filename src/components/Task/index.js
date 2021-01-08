@@ -51,7 +51,7 @@ class Task extends PureComponent {
             }}
           >
             {this.props.task.content}
-            <EditPencil><FontAwesomeIcon icon={faPenAlt} /></EditPencil>
+            {this.props.task.description && <EditPencil><FontAwesomeIcon icon={faPenAlt} /></EditPencil>}
           </Container>
         )}
       </Draggable>
