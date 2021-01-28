@@ -6,7 +6,7 @@ import Nav from '../components/Nav';
 import Header from '../components/Header';
 import List from '../components/List';
 import AddList from '../components/AddList';
-import TaskModal from './TaskModal';
+import TaskModal from '../components/TaskModal';
 import { logout } from '../store/actions/author.creator';
 import { updateBoardListOrder, getBoard } from '../store/actions/board.creator';
 import {

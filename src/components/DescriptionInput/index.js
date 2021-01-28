@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import SaveCloseButtons from '../SaveCloseButtons';
 
 const DescriptionBox = styled.textarea`
-  resize: none;
+  resize: vertical;
   width: 96%;
-  height: 100px;
+  min-height: 100px;
+  height: 200px;
+  max-height: 300px;
   border-radius: 5px;
   padding: 10px;
   font-family: sans-serif;

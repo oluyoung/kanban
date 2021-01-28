@@ -13,25 +13,12 @@ const Container = styled.p`
   border-radius: 4px;
   padding: 8px;
   margin-bottom: 8px;
-  width: 95%;
-  display: inline-flex;
+  display: flex;
   justify-content: space-between;
   box-shadow: 1px 1px 3px #ccc;
   &:hover,
   &:focus {
     background-color: #e0e0e0;
-  }
-
-  @media (max-width: 1024px) {
-    width: 94%;
-  }
-
-  @media (max-width: 768px) {
-    width: 95%;
-  }
-
-  @media (max-width: 480px) {
-    width: 93%;
   }
 `;
 const EditPencil = styled.span``;
