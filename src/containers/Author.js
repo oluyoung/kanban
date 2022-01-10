@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import Spinner from '../components/Spinner';
 import { addAuthor, getAuthors, setCurrentAuthor, logout } from '../store/actions/author.creator';
 import { getAuthorsList, getAuthorUsernames } from '../store/selectors';
 
@@ -81,7 +82,7 @@ const NewAuthorInputSubmit = styled.button`
   outline: none;
   border: 0;
   border-radius: 5px;
-  background-color: #55e360;
+  background-color: #fff;
   color: #111;
   font-weight: bold;
   cursor: pointer;
@@ -149,9 +150,12 @@ class User extends React.Component {
           <AuthorsText>Users</AuthorsText>
           <NewAuthorButton onClick={() => this.setState({isInputOpen: true})}>Add Author</NewAuthorButton>
         </Header>
-        {this.props.authors.length ?
+        {this.props.isLoading ? (
+          <Spinner />
+        ) : this.props.authors.length ?
           (<AuthorsListView>{authorsListView}</AuthorsListView>) :
-          (<NoAuthorsText>There are no authors yet</NoAuthorsText>)}
+          (<NoAuthorsText>There are no authors yet</NoAuthorsText>)
+        }
         {this.state.isInputOpen ?
           <NewAuthorContainer>
             <NewAuthorInput
@@ -160,7 +164,7 @@ class User extends React.Component {
               value={this.state.value}
               onChange={(event) => this.setState({username: event.target.value})} />
             <NewAuthorInputSubmit onClick={this.handleSubmit}>Add Author</NewAuthorInputSubmit>
-            <NewAuthorInputCancel onClick={() => this.setState({isInputOpen: false})}><FontAwesomeIcon icon={faTimes} /></NewAuthorInputCancel>
+            <NewAuthorInputCancel onClick={() => this.setState({ isInputOpen: false })}><FontAwesomeIcon icon={faTimes} /></NewAuthorInputCancel>
           </NewAuthorContainer> :
           null}
       </Container>
@@ -170,7 +174,8 @@ class User extends React.Component {
 
 const mapStateToProps = state => ({
   authors: getAuthorsList(state),
-  usernames: getAuthorUsernames(state)
+  usernames: getAuthorUsernames(state),
+  isLoading: state.authors.loading,
 });
 
 const mapDispatchToProps = dispatch => ({

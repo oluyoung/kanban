@@ -3,7 +3,8 @@ import * as actions from '../actions/constants';
 const initialState = {
   authors: {},
   currentAuthorId: undefined,
-  currentAuthor: undefined
+  currentAuthor: undefined,
+  loading: false,
 };
 
 export default function authorReducer(state = initialState, action) {
@@ -30,6 +31,11 @@ export default function authorReducer(state = initialState, action) {
         currentAuthorId: undefined,
         currentAuthor: undefined
       }
+    case actions.SET_LOADING:
+      return {
+        ...state,
+        loading: action.payload
+      };
     default:
       return state;
   }

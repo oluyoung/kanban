@@ -17,6 +17,7 @@ import {
   openTaskInput,
   closeTaskInput } from '../store/actions/list.creator';
 import { addTask, removeTask } from '../store/actions/task.creator';
+import localService from '../store/local.service';
 
 const Container = styled.div`
   max-width: 100%;
@@ -65,9 +66,14 @@ class Board extends Component {
   };
 
   componentDidMount() {
-    this.props.getBoard(this.props.match.params.boardId, this.props.authorId);
+    const boardId = localService.getBoard();
+    const author = localService.getAuthor();
+    if (!boardId || !author) {
+      this.props.history.push(`/`);
+    }
+    this.props.getBoard(boardId, author.id);
   }
-  
+
   componentDidUpdate() {
     if (this.props.match.params.taskId && !this.state.modalIsOpen) {
       this.setState({modalIsOpen: true});

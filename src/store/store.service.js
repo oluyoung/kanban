@@ -2,14 +2,12 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyArMVNWhoG9LhcjU_UvUTFo0r-0XGVlXDk',
-  authDomain: 'six-task.firebaseapp.com',
-  databaseURL: 'https://six-task.firebaseio.com',
-  projectId: 'six-task',
-  storageBucket: 'six-task.appspot.com',
-  messagingSenderId: '28885894950',
-  appId: '1:28885894950:web:e30d98fcfbcf96ba8323e7',
-  measurementId: 'G-QJLXFXG8JZ'
+  apiKey: "AIzaSyA1HLWpOluRwFlWoV0n7QrbwBqh1FaBZsw",
+  authDomain: "kanban-3e23d.firebaseapp.com",
+  projectId: "kanban-3e23d",
+  storageBucket: "kanban-3e23d.appspot.com",
+  messagingSenderId: "335439680123",
+  appId: "1:335439680123:web:373f0c527fcdb124bf48de"
 };
 
 firebase.initializeApp(firebaseConfig);

@@ -1,6 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
+import localService from '../../store/local.service';
 
 const BoardsListView = styled.div`
   display: flex;
@@ -34,34 +35,32 @@ const BoardItemText = styled.span`
   color: #fff;
 `;
 
-function generateRandomColor() {
-  let randomColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-  if (randomColor.length !== 7){ // In any case, the color code is invalid
-    randomColor = generateRandomColor();
-  }
-  return randomColor;
-}
-
-
-class BoardList extends PureComponent {
-  selectBoard = (boardId) => {
-    this.props.history.push(`/b/${boardId}`);
+const BoardList = (props) => {
+  const selectBoard = (boardId) => {
+    localService.setBoard(boardId);
+    props.history.push(`/b/${boardId}`);
   }
 
-  render() {
-    const boardsListView = this.props.boards.map(board => {
-      return (
+  const generateRandomColor = useCallback(() => {
+    let randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    if (randomColor.length !== 7){ // In any case, the color code is invalid
+      randomColor = generateRandomColor();
+    }
+    return randomColor;
+  }, []);
+
+  return (
+    <BoardsListView>
+      {props.boards.map(board => (
         <BoardItem
           key={board.id}
-          onClick={() => this.selectBoard(board.id)}
+          onClick={() => selectBoard(board.id)}
           style={{backgroundColor: generateRandomColor()}}>
           <BoardItemText>{board.title}</BoardItemText>
         </BoardItem>
-      );
-    });
-
-    return <BoardsListView>{boardsListView}</BoardsListView>;
-  }
-}
+      ))}
+    </BoardsListView>
+  );
+};
 
 export default withRouter(BoardList);

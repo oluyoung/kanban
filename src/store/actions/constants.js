@@ -31,4 +31,5 @@ export const REMOVE_CURRENT_BOARD = 'REMOVE_CURRENT_BOARD';
 export const ADD_AUTHOR = 'ADD_AUTHOR';
 export const SET_AUTHOR = 'SET_AUTHOR';
 export const GET_AUTHORS = 'GET_AUTHORS';
+export const SET_LOADING = 'SET_LOADING';
 export const LOGOUT = 'LOGOUT';

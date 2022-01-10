@@ -1,12 +1,11 @@
 import * as actions from '../actions/constants';
 
-const initalData = {
+const initialState = {
   boards: {},
   currentBoardId: undefined,
-  currentBoard: undefined
+  currentBoard: undefined,
+  loading: false,
 };
-
-const initialState = initalData
 
 export default function boardReducer(state = initialState, action) {
   switch(action.type) {
@@ -61,6 +60,11 @@ export default function boardReducer(state = initialState, action) {
         ...state,
         boards: updatedBoards,
         currentBoard: updatedCurrentBoard
+      };
+    case actions.SET_LOADING:
+      return {
+        ...state,
+        loading: action.payload
       };
     default:
       return state;

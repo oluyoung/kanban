@@ -3,14 +3,17 @@ import * as actions from './constants';
 import storeService from '../store.service';
 import { getTasksForBoard } from './task.creator';
 import { getListsForBoard } from './list.creator';
+import localService from '../local.service';
 
 export function getBoards() {
   return (dispatch, getStore) => {
+    dispatch({ type: actions.SET_LOADING, payload: true });
     storeService.getBoardsForAuthor(getStore().authors.currentAuthorId)
       .then((boards) => {
         dispatch({ type: actions.GET_BOARDS, boards });
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => alert(error.message))
+      .finally(() => dispatch({ type: actions.SET_LOADING, payload: false }));
   };
 }
 
@@ -77,6 +80,7 @@ export function getBoard(boardId, authorId) {
       return;
     }
     if (boards[boardId].authorId !== authorId) {
+      console.log(boardId, authorId);
       return;
     }
     dispatch(addCurrentBoard(boardId));
@@ -86,6 +90,7 @@ export function getBoard(boardId, authorId) {
 }
 
 export function addCurrentBoard(id) {
+  localService.setBoard(id);
   return {
     type: actions.GET_CURRENT_BOARD,
     id

@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import localService from '../local.service';
 import storeService from '../store.service';
 import * as actions from './constants';
 
@@ -15,9 +16,11 @@ export function addAuthor(username) {
 
 export function getAuthors() {
   return (dispatch) => {
+    dispatch({ type: actions.SET_LOADING, payload: true });
     storeService.getAuthors()
       .then((authors) => dispatch({ type: actions.GET_AUTHORS, authors }))
-      .catch((error) => alert(error.message));
+      .catch((error) => alert(error.message))
+      .finally(() => dispatch({ type: actions.SET_LOADING, payload: false }));
   };
 }
 
@@ -25,6 +28,7 @@ export function setCurrentAuthor(authorId) {
   return (dispatch, getStore) => {
     const author = getStore().authors.authors[authorId];
     if (author) {
+      localService.setAuthor(author);
       dispatch({
         type: actions.SET_AUTHOR,
         author
@@ -35,6 +39,7 @@ export function setCurrentAuthor(authorId) {
 
 export function logout() {
   return (dispatch) => {
-    dispatch({type: actions.LOGOUT});
+    localService.logout();
+    dispatch({ type: actions.LOGOUT });
   };
 }

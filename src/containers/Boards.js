@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Logout from '../components/Logout';
+import Spinner from '../components/Spinner';
 import { getAuthorBoards } from '../store/selectors';
 import { logout } from '../store/actions/author.creator';
 import { getBoards, addBoard } from '../store/actions/board.creator';
@@ -114,9 +115,12 @@ class Boards extends Component {
             <Logout logout={this.logout} />
           </HeaderButtons>
         </Header>
-        {this.props.boards.length ?
+        {this.props.isLoading ? (
+          <Spinner />
+        ) : this.props.boards.length ?
           (<BoardList boards={this.props.boards} />) :
-          (<NoBoardsText>You have no boards yet</NoBoardsText>)}
+          (<NoBoardsText>You have no boards yet</NoBoardsText>)
+        }
         {this.state.isInputOpen ?
           <NewBoardContainer>
             <NewBoardInput
