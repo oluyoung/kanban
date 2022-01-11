@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import localService from '../../store/local.service';
 
 const BoardsListView = styled.div`
   display: flex;
@@ -37,7 +36,6 @@ const BoardItemText = styled.span`
 
 const BoardList = (props) => {
   const selectBoard = (boardId) => {
-    localService.setBoard(boardId);
     props.history.push(`/b/${boardId}`);
   }
 

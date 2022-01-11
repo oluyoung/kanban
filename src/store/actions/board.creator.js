@@ -3,7 +3,6 @@ import * as actions from './constants';
 import storeService from '../store.service';
 import { getTasksForBoard } from './task.creator';
 import { getListsForBoard } from './list.creator';
-import localService from '../local.service';
 
 export function getBoards() {
   return (dispatch, getStore) => {
@@ -90,7 +89,6 @@ export function getBoard(boardId, authorId) {
 }
 
 export function addCurrentBoard(id) {
-  localService.setBoard(id);
   return {
     type: actions.GET_CURRENT_BOARD,
     id

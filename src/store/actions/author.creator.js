@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid';
-import localService from '../local.service';
 import storeService from '../store.service';
 import * as actions from './constants';
 
@@ -28,7 +27,6 @@ export function setCurrentAuthor(authorId) {
   return (dispatch, getStore) => {
     const author = getStore().authors.authors[authorId];
     if (author) {
-      localService.setAuthor(author);
       dispatch({
         type: actions.SET_AUTHOR,
         author
@@ -39,7 +37,6 @@ export function setCurrentAuthor(authorId) {
 
 export function logout() {
   return (dispatch) => {
-    localService.logout();
     dispatch({ type: actions.LOGOUT });
   };
 }

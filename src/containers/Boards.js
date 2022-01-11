@@ -140,6 +140,7 @@ class Boards extends Component {
 const mapStateToProps = state => ({
   author: state.authors.currentAuthor,
   boards: getAuthorBoards(state, state.authors.currentAuthorId),
+  isLoading: state.boards.loading,
 });
 
 const mapDispatchToProps = dispatch => ({
