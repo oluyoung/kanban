@@ -1,5 +1,17 @@
 body {
-  background-color: #a6cddf;
+  background-color: #fff0f0;
+
+  --bgcolour: #fff;
+  --text: #382b22;
+  --light-pink: #fff0f0;
+  --pink: #ffe9e9;
+  --dark-pink: #f9c4d2;
+  --pink-border: #b18597;
+  --pink-shadow: #ffe3e2;
+  --red: #FF0000;
+  --red-border: #3D0000;
+  --dark-red: #9B0000;
+  --white: #fff;
 }
 
 code {

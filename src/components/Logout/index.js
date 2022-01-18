@@ -4,8 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Button = styled.a`
-  color: white;
+  color: var(--dark-red);
   cursor: pointer;
+
+  &:hover,
+  &:active {
+    color: var(--dark-pink);
+  }
 `;
 
 export default function Logout(props) {

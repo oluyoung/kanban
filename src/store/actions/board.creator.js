@@ -38,7 +38,7 @@ export function addList(boardId, listId) {
   return (dispatch, getStore) => {
     const board = {...getStore().boards.boards[boardId]};
     const updatedListIds = board.listOrder.concat(listId);
-    storeService.addListToBoard(boardId, updatedListIds)
+    storeService.updateListOnBoard(boardId, updatedListIds)
       .then(() => {
         dispatch({
           type: actions.ADD_LIST_TO_BOARD,
@@ -57,7 +57,7 @@ export function removeList(boardId, listId) {
   return (dispatch, getStore) => {
     const board = {...getStore().boards.boards[boardId]};
     const updatedListIds = board.listOrder.filter(id => (listId !== id));
-    storeService.removeListFromBoard(boardId, updatedListIds)
+    storeService.updateListOnBoard(boardId, updatedListIds)
       .then(() => {
         dispatch({
           type: actions.REMOVE_LIST_FROM_BOARD,

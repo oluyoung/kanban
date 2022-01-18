@@ -34,6 +34,16 @@ export default function boardReducer(state = initialState, action) {
         currentBoardId: undefined,
         currentBoard: undefined
       };
+    case actions.DELETE_BOARD:
+      const currentBoards = state.boards;
+      delete currentBoards[action.id];
+
+      return {
+        ...state,
+        boards: {
+          ...currentBoards,
+        }
+      };
     case actions.REMOVE_LIST_FROM_BOARD:
     case actions.ADD_LIST_TO_BOARD:
       return {

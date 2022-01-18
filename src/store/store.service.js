@@ -1,161 +1,140 @@
-import firebase from 'firebase';
-import 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import { query, where, collection, getDoc, getDocs, deleteDoc, setDoc, doc, updateDoc, arrayUnion, arrayRemove, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA1HLWpOluRwFlWoV0n7QrbwBqh1FaBZsw",
-  authDomain: "kanban-3e23d.firebaseapp.com",
-  projectId: "kanban-3e23d",
-  storageBucket: "kanban-3e23d.appspot.com",
-  messagingSenderId: "335439680123",
-  appId: "1:335439680123:web:373f0c527fcdb124bf48de"
+  apiKey: "AIzaSyArMVNWhoG9LhcjU_UvUTFo0r-0XGVlXDk",
+  authDomain: "six-task.firebaseapp.com",
+  databaseURL: "https://six-task.firebaseio.com",
+  projectId: "six-task",
+  storageBucket: "six-task.appspot.com",
+  messagingSenderId: "28885894950",
+  appId: "1:28885894950:web:e30d98fcfbcf96ba8323e7",
+  measurementId: "G-QJLXFXG8JZ"
 };
 
-firebase.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
+const db = getFirestore();
+
+const TASKS = 'tasks';
+const AUTHORS = 'authors';
+const BOARDS = 'boards';
+const LISTS = 'lists';
 
 class StoreService {
-  getTasksForBoard(boardId) {
-    return this._getResourcesForModel('tasks', 'boardId', boardId);
-  }
+  getTasksForBoard = (boardId) => taskStore.getAllForParent('boardId', boardId);
 
-  addTask(task) {
-    return db.collection('tasks').doc(task.id).set({...task});
-  }
+  addTask = (task) => taskStore.add(task);
 
-  updateTask(id, data) {
-    return db.collection('tasks').doc(id).update({...data});
-  }
+  updateTask = (id, data) => taskStore.update(id, data);
 
-  removeTask(id) {
-    return db.collection('tasks').doc(id).delete();
-  }
+  removeTask = (id) => taskStore.delete(id);
 
-  getTask(id) {
-    return new Promise((resolve, reject) => {
-      db.collection('tasks').doc(id).get()
-        .then((doc) => {
-          if (doc.exists) {
-            return resolve(doc.data());
-          } else {
-            return reject(new Error('No task with that id exists'));
-          }
-        })
-        .catch((error) => reject(error));
-    });
-  }
+  getTask = (id) => taskStore.get(id);
 
-  removeListTasks(ids) {
-    return Promise.all(ids.map(id => db.collection('tasks').doc(id).delete()));
-  }
+  removeListTasks = (ids) => Promise.all(ids.map(id => this.removeTask(id)));
 
-  getAuthors() {
-    return new Promise((resolve, reject) => {
-      return db.collection('authors').get()
-        .then((querySnapshots) => {
-          const authors = {};
-          querySnapshots.forEach((doc) => {
-            authors[doc.id] = doc.data();
-          });
-          return resolve(authors);
-        })
-        .catch((error) => reject(error));
-      });
-  }
+  getAuthors = () => authorStore.getAll();
 
-  addAuthor(author) {
-    return db.collection('authors').doc(author.id).set({...author});
-  }
+  addAuthor = (author) => authorStore.add(author);
 
-  addList(list) {
-    return db.collection('lists').doc(list.id).set({...list});
-  }
+  addList = (list) => listStore.add(list);
 
-  removeList(id) {
-    return db.collection('lists').doc(id).delete();
-  }
+  removeList = (id) => listStore.delete(id);
 
-  addTaskToList(id, taskId) {
-    return db.collection('lists').doc(id).update({
-      taskIds: firebase.firestore.FieldValue.arrayUnion(taskId)
-    });
-  }
+  addTaskToList = (id, taskId) => listStore.update(id, { taskIds: arrayUnion(taskId) });
 
-  removeTaskFromList(id, taskId) {
-    return db.collection('lists').doc(id).update({
-      taskIds: firebase.firestore.FieldValue.arrayRemove(taskId)
-    });
-  }
+  removeTaskFromList = (id, taskId) => listStore.update(id, { taskIds: arrayRemove(taskId) });
 
-  updateListTasksOrder(id, taskIds) {
-    return db.collection('lists').doc(id).update({ taskIds });
-  }
-
-  updateListsTasksOrder(sourceId, sourceTaskids, destinationId, destinationTaskIds) {
-    return Promise.all([
-      this.updateListTasksOrder(sourceId, sourceTaskids),
-      this.updateListTasksOrder(destinationId, destinationTaskIds)
+  updateListsTasksOrder = (sourceId, sourceTaskids, destinationId, destinationTaskIds) =>
+    Promise.all([
+      listStore.update(sourceId, { taskIds: sourceTaskids }),
+      listStore.update(destinationId, { taskIds: destinationTaskIds })
     ]);
+
+  getListsForBoard = (boardId) => listStore.getAllForParent('boardId', boardId);
+
+  addBoard = (board) => boardStore.add(board);
+  
+  getBoardsForAuthor = (authorId) => boardStore.getAllForParent('authorId', authorId);
+
+  getBoard = (id) => boardStore.get(id);
+
+  removeBoard = (id) => boardStore.delete(id);
+
+  updateTasksOnList = (id, taskIds) =>
+    listStore.update(id, { taskIds, listOrder: taskIds });
+
+  updateListOnBoard = (id, listIds) =>
+    boardStore.update(id, { listIds, listOrder: listIds });
+
+  updateListOrder = (id, listOrder) => boardStore.update(id, { listOrder });
+}
+
+class StoreFunctions {
+  constructor(collection) {
+    this.collection = collection;
+    this.plural = collection.toLowerCase();
+    this.singular = collection.toLowerCase().substring(0, collection.length-1);
   }
 
-  getListsForBoard(boardId) {
-    return this._getResourcesForModel('lists', 'boardId', boardId);
-  }
-
-  addBoard(board) {
-    return db.collection('boards').doc(board.id).set({...board});
-  }
-
-  getBoardsForAuthor(authorId) {
-    return this._getResourcesForModel('boards', 'authorId', authorId);
-  }
-
-  getBoard(id) {
-    return new Promise((resolve, reject) => {
-      db.collection('boards').doc(id).get()
-        .then((doc) => {
-          if (doc.exists) {
-            return resolve(doc.data());
-          } else {
-            return reject(new Error('No board with that id exists'));
-          }
-        })
-        .catch((error) => reject(error));
+  add(resource) {
+    return setDoc(doc(db, this.collection, resource.id), {
+      ...resource,
+      created: new Date(),
+      updated: new Date()
     });
   }
 
-  addListToBoard(id, listIds) {
-    return db.collection('boards').doc(id).update({
-      listIds,
-      listOrder: listIds
+  update(id, update) {
+    return updateDoc(doc(db, this.collection, id), {
+      ...update,
+      updated: new Date()
     });
   }
 
-  removeListFromBoard(id, listIds) {
-    return db.collection('boards').doc(id).update({
-      listIds,
-      listOrder: listIds
-    });
+  delete(id) {
+    return deleteDoc(doc(db, this.collection, id));
   }
 
-  updateListOrder(id, listOrder) {
-    return db.collection('boards').doc(id).update({ listOrder });
+  async get(id) {
+    try {
+      const snap = await getDoc(doc(db, this.collection, id));
+      if (snap.exists()) {
+        return snap.data();
+      } else {
+        throw new Error(`No ${this.singular} with that id exists.`);
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
-  _getResourcesForModel(collection, modelIdPropertyName, modelId) {
-    return new Promise((resolve, reject) => {
-      db.collection(collection).where(modelIdPropertyName, '==', modelId).get()
-        .then((querySnapshots) => {
-          const resources = {};
-          querySnapshots.forEach((doc) => {
-            resources[doc.id] = doc.data();
-          });
-          return resolve(resources);
-        })
-        .catch((error) => reject(error));
+  async getAll() {
+    const snap = await getDocs(collection(db, this.collection));
+    const data = {};
+    snap.forEach((doc) => {
+      data[doc.id] = doc.data();
     });
+    return data;
+  }
+
+  async getAllForParent(modelIdPropertyName, modelId) {
+    const ref = collection(db, this.collection);
+    const q = query(ref, where(modelIdPropertyName, '==', modelId));
+    const querySnapshots = await getDocs(q);
+    const data = {};
+    querySnapshots.forEach((doc) => {
+      data[doc.id] = doc.data();
+    });
+    return data;
   }
 }
+
+const taskStore = new StoreFunctions(TASKS);
+const authorStore = new StoreFunctions(AUTHORS);
+const boardStore = new StoreFunctions(BOARDS);
+const listStore = new StoreFunctions(LISTS);
 
 const storeService = new StoreService();
 export default storeService;

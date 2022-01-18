@@ -35,6 +35,16 @@ export function setCurrentAuthor(authorId) {
   };
 }
 
+export function deleteBoard(id) {
+  return (dispatch) => {
+    storeService.removeBoard(id)
+      .then(() => {
+        dispatch({ type: actions.DELETE_BOARD, id });
+      })
+      .catch((error) => alert(error.message));
+  };
+}
+
 export function logout() {
   return (dispatch) => {
     dispatch({ type: actions.LOGOUT });

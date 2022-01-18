@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import Spinner from '../components/Spinner';
 import { addAuthor, getAuthors, setCurrentAuthor, logout } from '../store/actions/author.creator';
 import { getAuthorsList, getAuthorUsernames } from '../store/selectors';
@@ -40,23 +40,71 @@ const AuthorsListView = styled.div`
 `;
 const AuthorItem = styled.a`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 10px 0;
   border-radius: 5px;
-  font-weight: bold;
-  font-size: 16px;
   cursor: pointer;
   flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
   width: calc(25% - 1.5em);
   margin-right: 1.5em;
   margin-bottom: 1.5em;
   text-align: center;
+  position: relative;
+  background-color: var(--dark-pink);
+  box-shadow: 1px 2px 5px #111;
 
   @media (max-width: 640px) {
     width: calc(33.3333% - 1em);
     margin-right: 1em;
     margin-bottom: 1em;
+  }
+`;
+const AuthorIcon = styled.span`
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  border: 2px solid var(--pink-border);
+  border-radius: 50%;
+  padding: 1em;
+  width: 55px;
+  height: 55px;
+  color: var(--dark-pink);
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
+  &::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    top: -4px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--dark-pink);
+    border-radius: inherit;
+    box-shadow: 0 0 0 2px var(--pink-border);
+    transform: translate3d(0, 0.75em, -1em);
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+  }
+  &:hover {
+    background: var(--white);
+    transform: translate(0, 0.25em);
+    &::before {
+      box-shadow: 0 0 0 2px var(--pink-border);
+      transform: translate3d(0, 0.5em, -1em);
+    }
+  }
+  &:active {
+    background: var(--white);
+    transform: translate(0em, 0.75em);
+    &::before {
+      box-shadow: 0 0 0 2px var(--pink-border);
+      transform: translate3d(0, 0, -1em);
+    }
   }
 `;
 const NewAuthorContainer = styled.div`
@@ -66,8 +114,13 @@ const NewAuthorContainer = styled.div`
   margin-top: 1.5em;
 `;
 const AuthorName = styled.span`
-  display: nlock;
-  font-size: 16px;
+  display: inline-block;
+  font-size: 18px;
+  margin-top: 10px;
+  text-transform: capitalize;
+  text-align: center;
+  color: #111;
+  font-weight: bold;
 `;
 const NewAuthorInput = styled.input`
   padding: 5px;
@@ -139,7 +192,9 @@ class User extends React.Component {
     const authorsListView = this.props.authors.map(author => {
       return (
       <AuthorItem key={author.id} onClick={() => this.setAuthor(author.id)}>
-        <FontAwesomeIcon icon={faUserCircle} size="5x" />
+        <AuthorIcon>
+          <FontAwesomeIcon icon={faUser} size="3x" />
+        </AuthorIcon>
         <AuthorName>{author.username}</AuthorName>
       </AuthorItem>);
     });

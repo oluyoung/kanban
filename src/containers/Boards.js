@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useRef, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Logout from '../components/Logout';
 import Spinner from '../components/Spinner';
 import { getAuthorBoards } from '../store/selectors';
-import { logout } from '../store/actions/author.creator';
+import { logout as signOut, deleteBoard } from '../store/actions/author.creator';
 import { getBoards, addBoard } from '../store/actions/board.creator';
 import BoardList from '../components/BoardList';
 
@@ -72,81 +73,72 @@ const NewBoardInputCancel = styled.a`
   color: black;
 `;
 
-class Boards extends Component {
-  constructor() {
-    super();
-    this.inputRef = React.createRef();
-  }
+const Boards = (props) => {
+  const [isInputOpen, setIsInputOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const inputRef = useRef();
+  const author = useSelector(state => state.authors.currentAuthor);
+  const isLoading = useSelector(state => state.boards.loading);
+  const boards = useSelector(getAuthorBoards);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  state = {
-    isInputOpen: false,
-    title: ''
-  };
-
-  componentDidMount() {
-    if (!this.props.author) {
-      this.props.history.push(`/`);
+  useEffect(() => {
+    if (!author) {
+      history.push(`/`);
       return;
     }
-    this.props.getBoards();
+    dispatch(getBoards());
+  }, []);
+
+  const logout = () => {
+    dispatch(signOut());
+    history.push(`/`);
   }
 
-  logout = () => {
-    this.props.logout();
-    this.props.history.push(`/`);
-  }
-
-  handleSubmit = () => {
-    if (Boolean(this.state.title.trim())) {
-      this.props.addBoard(this.state.title);
-      this.setState({isInputOpen: false});
+  const handleSubmit = () => {
+    if (Boolean(title.trim())) {
+      dispatch(addBoard(title));
+      setIsInputOpen(false);
     } else {
-      this.inputRef.current.focus();
+      inputRef.current.focus();
     }
   };
 
-  render() {
-    return (
-      <Container>
-        <Header>
-          <YourBoardsText>Your boards</YourBoardsText>
-          <HeaderButtons>
-            <NewBoardButton onClick={() => this.setState({isInputOpen: true})}>Add Board</NewBoardButton>
-            <Logout logout={this.logout} />
-          </HeaderButtons>
-        </Header>
-        {this.props.isLoading ? (
-          <Spinner />
-        ) : this.props.boards.length ?
-          (<BoardList boards={this.props.boards} />) :
-          (<NoBoardsText>You have no boards yet</NoBoardsText>)
-        }
-        {this.state.isInputOpen ?
-          <NewBoardContainer>
-            <NewBoardInput
-              ref={this.inputRef}
-              placeholder="My New Project"
-              value={this.state.value}
-              onChange={(event) => this.setState({title: event.target.value})} />
-            <NewBoardInputSubmit onClick={this.handleSubmit}>Add Board</NewBoardInputSubmit>
-            <NewBoardInputCancel onClick={() => this.setState({isInputOpen: false})}>Cancel</NewBoardInputCancel>
-          </NewBoardContainer> :
-          null}
-      </Container>
-    );
-  }
+  const removeBoard = (id) => {
+    const conf = window.confirm('Are you sure you want to delete this board?');
+    if (conf) dispatch(deleteBoard(id));
+  };
+
+  return (
+    <Container>
+      <Header>
+        <YourBoardsText>Your boards</YourBoardsText>
+        <HeaderButtons>
+          <NewBoardButton onClick={() =>  setIsInputOpen(true)}>Add Board</NewBoardButton>
+          <Logout logout={logout} />
+        </HeaderButtons>
+      </Header>
+      {isLoading ? (
+        <Spinner />
+      ) : boards.length ?
+        (<BoardList boards={boards} deleteBoard={removeBoard} />) :
+        (<NoBoardsText>You have no boards yet</NoBoardsText>)
+      }
+      {isInputOpen ?
+        <NewBoardContainer>
+          <NewBoardInput
+            ref={inputRef}
+            placeholder="My New Project"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+          <NewBoardInputSubmit onClick={handleSubmit}>Add Board</NewBoardInputSubmit>
+          <NewBoardInputCancel onClick={() => setIsInputOpen(false)}>Cancel</NewBoardInputCancel>
+        </NewBoardContainer> :
+        null}
+    </Container>
+  );
 }
 
-const mapStateToProps = state => ({
-  author: state.authors.currentAuthor,
-  boards: getAuthorBoards(state, state.authors.currentAuthorId),
-  isLoading: state.boards.loading,
-});
-
-const mapDispatchToProps = dispatch => ({
-  getBoards: () => dispatch(getBoards()),
-  addBoard: (title) => dispatch(addBoard(title)),
-  logout: () => dispatch(logout())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Boards);
+export default Boards;

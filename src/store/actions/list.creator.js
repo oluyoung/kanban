@@ -98,7 +98,7 @@ export function updateListTasksOrder(source, destination, draggableId) {
     const taskIds = list.taskIds.filter((_, index) => (index !== source.index));
     taskIds.splice(destination.index, 0, draggableId);
 
-    storeService.updateListTasksOrder(list.id, taskIds)
+    storeService.updateTasksOnList(list.id, taskIds)
       .then(() => {
         const lists = {
           ...getStore().lists.lists,

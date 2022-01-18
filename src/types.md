@@ -6,6 +6,8 @@ interface Task {
   content: string;
   authorId: string;
   description?: string;
+  created: Date;
+  updated: Date;
 }
 ```
 
@@ -15,6 +17,7 @@ interface Task {
 interface Author {
   id: string;
   username: string;
+  created: Date;
 }
 ```
 
@@ -27,6 +30,8 @@ interface Board {
   listIds: string[];
   listOrder: string[];
   authorId: string;
+  created: Date;
+  updated: Date;
 }
 ```
 
@@ -38,5 +43,7 @@ interface List {
   title: string;
   taskIds: string;
   authorId: string;
+  created: Date;
+  updated: Date;
 }
 ```

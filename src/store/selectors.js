@@ -13,10 +13,10 @@ export function getListTasks(state, listId) {
   });
 }
 
-export function getAuthorBoards(state, authorId) {
+export function getAuthorBoards(state) {
   return Object.keys(state.boards.boards).reduce((boards, boardId) => {
     const board = state.boards.boards[boardId];
-    if (board.authorId === authorId) {
+    if (board.authorId === state.authors.currentAuthorId) {
       return boards.concat({
         id: board.id,
         title: board.title

@@ -32,4 +32,5 @@ export const ADD_AUTHOR = 'ADD_AUTHOR';
 export const SET_AUTHOR = 'SET_AUTHOR';
 export const GET_AUTHORS = 'GET_AUTHORS';
 export const SET_LOADING = 'SET_LOADING';
+export const DELETE_BOARD = 'DELETE_BOARD';
 export const LOGOUT = 'LOGOUT';
