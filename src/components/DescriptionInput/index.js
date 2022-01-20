@@ -1,31 +1,25 @@
 import React from 'react';
-import styled from 'styled-components';
+import ReactMarkdown from "react-markdown";
+import Editor from "react-markdown-editor-lite";
+import "react-markdown-editor-lite/lib/index.css";
 import SaveCloseButtons from '../SaveCloseButtons';
 
-const DescriptionBox = styled.textarea`
-  resize: vertical;
-  width: 96%;
-  min-height: 100px;
-  height: 200px;
-  max-height: 300px;
-  border-radius: 5px;
-  padding: 10px;
-  font-family: sans-serif;
-  font-size: 16px;
-`;
-
 export default function DescriptionInput(props) {
-  const [description, setDescription] = React.useState(props.description);
+  const mdRef = React.useRef(null);
+  const [description, setDescription] = React.useState(props.description || '');
 
   return (
     <>
-      <DescriptionBox
-        placeholder="Add a more detailed description..."
+      <Editor
         value={description}
-        onChange={event => setDescription(event.target.value)}>
-      </DescriptionBox>
+        onChange={({ html, text }) => setDescription(text)}
+        ref={mdRef}
+        canView={{ html: false }}
+        style={{ height: '300px' }}
+        renderHTML={text => <ReactMarkdown children={text} />}
+      />
       <SaveCloseButtons
-        save={props.updateDescription}
+        save={() => props.updateDescription(description)}
         value={description}
         close={props.closeInput} />
     </>

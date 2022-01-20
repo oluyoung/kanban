@@ -1,6 +1,4 @@
 body {
-  background-color: #fff0f0;
-
   --bgcolour: #fff;
   --text: #382b22;
   --light-pink: #fff0f0;
@@ -12,6 +10,8 @@ body {
   --red-border: #3D0000;
   --dark-red: #9B0000;
   --white: #fff;
+
+  background-color: var(--light-pink);
 }
 
 code {
@@ -22,6 +22,15 @@ code {
 .spin {
   -webkit-animation: spin-anim 2s linear infinite;
   animation: spin-anim 2s linear infinite;
+}
+
+.rc-md-editor .editor-container .sec-md {
+  min-width: 100% !important;
+  width: 100% !important;
+}
+
+.rc-md-editor .editor-container .sec-html {
+  display: none !important;
 }
 
 @keyframes spin-anim {

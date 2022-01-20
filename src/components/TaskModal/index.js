@@ -1,10 +1,14 @@
 import React from 'react';
 import { withRouter, useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import ReactMarkdown from "react-markdown";
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faTrash, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import ThreeDButton from '../ThreeDButton';
 import {
   getTask,
   updateContent as updateTaskContent,
@@ -13,6 +17,7 @@ import {
 } from '../../store/actions/task.creator';
 import ContentInput from '../ContentInput';
 import DescriptionInput from '../DescriptionInput';
+import { cornflower, babyBlue, navyBlue } from '../../colors';
 
 const customStyles = {
   content : {
@@ -47,6 +52,9 @@ const Header = styled.div`
 const Title = styled.h2``;
 const DescriptionTitle = styled.h4`
   margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 const DescriptionContainer = styled.div``;
 const Edit = styled.button`
@@ -58,7 +66,7 @@ const Edit = styled.button`
   font-weight: bold;
   cursor: pointer;
 `;
-const Description = styled.pre`
+const Description = styled.div`
   background-color: #fafafa;
   padding: 10px;
   border-radius: 5px;
@@ -123,7 +131,12 @@ const TaskModal = (props) => {
   const closeDescriptionInput = () => setIsDescriptionInputOpen(false);
   const closeContentInput = () => setIsContentInputOpen(false);
 
-  
+  const copy = () => {
+    navigator.clipboard.writeText(task.description)
+      .then(() => console.log('copied'))
+      .catch((error) => console.error(error));
+  };
+
   return (
     <>
     {task &&
@@ -147,13 +160,50 @@ const TaskModal = (props) => {
             </Title>}
         </Header>
         <DescriptionContainer>
-          <DescriptionTitle>Description
-            <Edit
-              hidden={task.description ? isDescriptionInputOpen : true}
-              onClick={() => setIsDescriptionInputOpen(true)}>Edit</Edit>
+          <DescriptionTitle>
+            <span>
+              Description
+              <Edit
+                hidden={task.description ? isDescriptionInputOpen : true}
+                onClick={() => setIsDescriptionInputOpen(true)}>Edit
+              </Edit>
+            </span>
+            <span>
+              {task.description ? (
+                <ThreeDButton
+                  onClick={copy}
+                  icon={faCopy}
+                  bgColor={babyBlue}
+                  iconColor={cornflower}
+                  shadow={navyBlue}
+                />
+              ) : null}
+            </span>
           </DescriptionTitle>
           {task.description && !isDescriptionInputOpen ?
-            <Description>{task.description}</Description> :
+            <Description>
+              <ReactMarkdown
+                children={task.description}
+                components={{
+                  code({node, inline, className, children, ...props}) {
+                    const match = /language-(\w+)/.exec(className || '')
+                    return !inline && match ? (
+                      <SyntaxHighlighter
+                        children={String(children).replace(/\n$/, '')}
+                        style={materialLight}
+                        language={match[1]}
+                        PreTag="div"
+                        {...props}
+                      />
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    )
+                  }
+                }}
+              />
+            </Description> :
             <DescriptionInput
               description={task.description}
               updateDescription={updateDescription}
@@ -166,16 +216,5 @@ const TaskModal = (props) => {
     </>
   );
 }
-
-// const mapStateToProps = state => ({
-//   task: state.tasks.currentTask
-// });
-
-// const mapDispatchToProps = dispatch => ({
-//   getTask: (taskId, boardId) => dispatch(getTask(taskId, boardId)),
-//   removeTask: (task) => dispatch(removeTask(task)),
-//   updateContent: (taskId, content) => dispatch(updateContent(taskId, content)),
-//   updateDescription: (taskId, description) => dispatch(updateDescription(taskId, description))
-// });
 
 export default withRouter(TaskModal);
