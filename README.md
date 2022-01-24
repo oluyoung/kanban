@@ -1,4 +1,3 @@
 # Kanban
 
-Simple kanban demo app built with React and persisted with localstorage (Issues and adaptations welcome)
-
+Kanban app built with React and persisted with localstorage (but can be adapted to any other storage platform)
